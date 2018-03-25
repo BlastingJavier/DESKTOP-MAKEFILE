@@ -18,28 +18,15 @@
 #include "object.h"
 #include "dice.h"
 
-/**
- * @brief Estructura de game 101 espacios , comandos id jugador ,id objeto
-*/
-typedef struct _Game{
-  Player* player; /*!< Campo del Jugador*/
-  Object* objects[MAX_ID]; /*!< Campo del Objeto*/
-  Space* spaces[MAX_SPACES + 1]; /*!< Campo de Espacios*/
-  T_Command last_cmd; /*!< Hace referencia al ultimo comando*/
-  Dice * dice;/*!< Con esto podemos utilizar el dado*/
-  char* param;/*!< string (control de descripcion grafica)*/
-  STATUS flag_command;/*!< Flag de status (para ver si un comando es correcto o incorrecto)*/
-} Game;
-
-
+typedef struct _Game Game;
 
 /**
  * @author Francisco Nanclares
  * @brief Inicialización de la estructura Game
- * @param game, puntero a estructura Game (dirección)
+ * @param game, puntero a puntero de game.
  * @return status, OK O ERROR
  */
-STATUS game_create(Game* game);
+STATUS game_create(Game** game);
 
 
 
@@ -51,7 +38,7 @@ STATUS game_create(Game* game);
  * @param filename, fichero de casillas (data.dat)
  * @return status, OK O ERROR
  */
-STATUS game_create_from_file(Game* game, char* filename);
+STATUS game_create_from_file(Game** game, char* filename);
 
 
 
@@ -240,4 +227,17 @@ void game_set_parametro (Game * game , char *param);
  * @return flag_command, que es la flag de la estructura game
  */
 STATUS game_get_last_command_flag(Game *game);
+
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene un dado
+ * @param game, puntero a la estructura Game
+ * @return dice , que es el dice de la estructura de game
+ */
+Dice* game_get_dice(Game *game);
+
+
 #endif

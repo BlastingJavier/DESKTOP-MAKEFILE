@@ -28,15 +28,15 @@
 /** @brief Id del objeto*/
 #define ID_O 1
 /** @brief Id del dado*/
-#define ID_DICE 1 
+#define ID_DICE 1
 /** @brief Posicion inicial del jugador*/
 #define INIC_P 0
 /** @brief tamano del nombre del objeto*/
 #define MAX_INPUT_OBJ
 /** @brief Numero de casillas (variable si modifi. data.dat)*/
-#define MAX_CASILLAS 12 
+#define MAX_CASILLAS 12
 /** @brief Numero maximo de callbacks*/
-#define N_CALLBACK 9 
+#define N_CALLBACK 9
 
 /**                 Definidos en:
                         ||
@@ -53,6 +53,20 @@ FOLLOWING = 2 <==command.h
 PREVIOUS = 3 <==command.h
 P. F.: Private Function
 */
+
+/**
+ * @brief Estructura de game 101 espacios , comandos id jugador ,id objeto
+*/
+struct _Game {
+  Player* player; /*!< Campo del Jugador*/
+  Object* objects[MAX_ID]; /*!< Campo del Objeto*/
+  Space* spaces[MAX_SPACES + 1]; /*!< Campo de Espacios*/
+  T_Command last_cmd; /*!< Hace referencia al ultimo comando*/
+  Dice * dice;/*!< Con esto podemos utilizar el dado*/
+  char* param;/*!< string (control de descripcion grafica)*/
+  STATUS flag_command;/*!< Flag de status (para ver si un comando es correcto o incorrecto)*/
+};
+
 
 /**
  * @brief Define el tipo de función para las llamadas a esta
@@ -130,29 +144,29 @@ Id game_get_space_id_at(Game* game, int position);
 /**
  * @author Francisco Nanclares
  * @brief Inicialización de la estructura Game
- * @param game, puntero a estructura Game (dirección)
+ * @param game, puntero a puntero de game.
  * @return status, OK O ERROR
  */
-STATUS game_create(Game* game) {
+STATUS game_create(Game** game) {
   int i;
-
+  *game = (Game*)malloc(sizeof(Game));
   for (i = 0; i < MAX_SPACES; i++) {/*Vacia el array spaces*/
-    game->spaces[i] = NULL;
+    (*game)->spaces[i] = NULL;
     /*  game->object = object_create(ID_O);*//*1*/
 
   }
-  game->player = player_create(ID_J);/*1*/
+  (*game)->player = player_create(ID_J);/*1*/
   /*game->player = player_create(ID_P)
     game_set_player_location(game,NO_ID)*/
-  game_set_player_location(game,NO_ID);
+  game_set_player_location((*game),NO_ID);
 
   for (i=0;i<MAX_ID;i++){
-    game->objects[i] = NULL;
+    (*game)->objects[i] = NULL;
   }
 
-  game->last_cmd = NO_CMD;
-  game->dice =dice_create(ID_DICE);/*1*/
-  game->param = " ";
+  (*game)->last_cmd = NO_CMD;
+  (*game)->dice =dice_create(ID_DICE);/*1*/
+  (*game)->param = " ";
 
   return OK;
 }
@@ -167,18 +181,18 @@ STATUS game_create(Game* game) {
  * @param filename, fichero de casillas (data.dat)
  * @return status, OK O ERROR
  */
-STATUS game_create_from_file(Game* game, char* filename) {
+STATUS game_create_from_file(Game** game, char* filename) {
   if (game_create(game) == ERROR)
     return ERROR;
 
-  if (game_reader_load_spaces(game, filename) == ERROR){
+  if (game_reader_load_spaces((*game), filename) == ERROR){
     return ERROR;
   }
-  if (game_reader_load_objects(game,filename)==ERROR){
+  if (game_reader_load_objects((*game),filename)==ERROR){
     return ERROR;
   }
     /*Colocamos en casilla 0 a player y random al player*/
-  game_set_player_location(game, game_get_space_id_at(game, INIC_P));
+  game_set_player_location((*game), game_get_space_id_at((*game), INIC_P));
   return OK;
 }
 
@@ -204,6 +218,7 @@ STATUS game_destroy(Game* game) {
 
   player_destroy(game->player);
   dice_destroy(game->dice);
+  free(game);
 
   return OK;
 }
@@ -457,7 +472,7 @@ Id game_get_object_location(Game* game,Object *object) {
       set = space_get_objects(game->spaces[i]);
 
       for (j=0;j<set_get_top(set);j++){
-        space_id_aux = get_specific_id(set,j);
+        space_id_aux = set_get_specific_id(set,j);
         /*Si id (objeto_en_casilla) == id (objeto)*/
         if (space_id_aux == object_id_aux){
           location = space_get_id(game->spaces[i]);
@@ -493,7 +508,7 @@ BOOL game_get_object_player(Game* game , Object* object){
   for (i=0;i<set_get_top(set);i++){
     /*Cada vez que se entra en el bucle, el id del jugador toma el id especifico del
       set y compara con el del objeto pasado por referencia. Si coinciden, hay objeto*/
-    id_player_aux = get_specific_id(set,i);
+    id_player_aux = set_get_specific_id(set,i);
 
     if (id_player_aux == id_obj_aux){
       return TRUE;
@@ -788,7 +803,7 @@ void game_callback_get(Game* game) {
     return;
   }
   if (object_check_in_space(current_space,id_object)==TRUE){
-    if (delete_id(set,id_object)==ERROR){
+    if (set_delete_id(set,id_object)==ERROR){
       game->flag_command = ERROR;
       return;
     }
@@ -849,7 +864,7 @@ void game_callback_drop(Game* game) {
     game->flag_command = ERROR;
     return;
   }
-  if (delete_id(p_player_set ,id_object) == ERROR){
+  if (set_delete_id(p_player_set ,id_object) == ERROR){
     game->flag_command = ERROR;
     return;
   }
@@ -890,4 +905,15 @@ void game_callback_roll_dice(Game *game){
  */
 STATUS game_get_last_command_flag(Game *game){
   return game->flag_command;
+}
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene un dado
+ * @param game, puntero a la estructura Game
+ * @return dice , que es el dice de la estructura de game
+ */
+Dice* game_get_dice(Game *game){
+  return game->dice;
 }

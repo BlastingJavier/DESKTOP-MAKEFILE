@@ -2,7 +2,7 @@
 *@brief Implementa los comandos
 *
 *@file command.c
-*@author FJNR & AMH & CMF & MLRfffsgsadfadsf
+*@author FJNR & AMH & CMF & MLR
 *@version 1.0aadsf
 *@date 01/02/2018
 *@copyright GNU Public License

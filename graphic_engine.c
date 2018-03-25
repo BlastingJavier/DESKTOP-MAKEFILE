@@ -16,7 +16,7 @@
 #include "dice.h"
 
 /** @brief Numero de objeto de */
-#define NUM_OBJ 4 
+#define NUM_OBJ 4
 
 /**                 Definidos en:
                         ||
@@ -126,6 +126,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   extern char *cmd_to_str[];/*string del nombre del comando*/
   char *gdesc[3];/*strings de descripcion grafica*/
   /*Dibuja el área de mapa*/
+  Object *object;
 
   screen_area_clear(ge->map);
   if ((id_act = game_get_player_location(game)) != NO_ID){
@@ -144,9 +145,11 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     }
 
     /*Como ahora tenemos varios objeto ...*/
-    for (i=0;i<MAX_ID && game->objects[i] != NULL;i++){
-      if (game_get_object_location(game,game->objects[i]) == id_back){
-        obj[i] = object_get_name(game->objects[i]);
+    for (i=0;i<MAX_ID;i++){
+      if ((object = game_get_object(game,i)) != NULL){
+        if (game_get_object_location(game,object) == id_back){
+          obj[i] = object_get_name(object);
+        }
       }
     }
     /*Casilla anterior (efecto de refresco)*/
@@ -174,9 +177,11 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       obj[i] = "   ";
     }
 
-    for (i=0;i<MAX_ID && game->objects[i] != NULL;i++){
-      if (game_get_object_location(game,game->objects[i]) == id_act){
-        obj[i] = object_get_name(game->objects[i]);
+    for (i=0;i<MAX_ID;i++){
+      if ((object = game_get_object(game,i)) != NULL){
+        if (game_get_object_location(game,object) == id_act){
+          obj[i] = object_get_name(object);
+        }
       }
     }
       /*Las casillas hay que redimensionarlas*/
@@ -224,9 +229,11 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       obj[i] = "   ";
     }
 
-    for (i=0;i<MAX_ID && game->objects[i] != NULL;i++){
-      if (game_get_object_location(game,game->objects[i]) == id_next){
-        obj[i] = object_get_name(game->objects[i]);
+    for (i=0;i<MAX_ID;i++){
+      if ((object = game_get_object(game,i)) != NULL){
+        if (game_get_object_location(game,object) == id_next){
+          obj[i] = object_get_name(object);
+        }
       }
     }
     /*Casilla siguiente (efecto de refresco)*/
@@ -259,11 +266,13 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   /*Se encarga de recorrer el array de objetos pone el nombre que le hemos otorgado
     en el fichero de datos*/
 
-  for (i=0;i<MAX_ID && game->objects[i] != NULL ;i++){
-    obj_loc = game_get_object_location(game,game->objects[i]);
-    if (obj_loc != NO_ID){
-      sprintf(str,"%s:%d",object_get_name(game->objects[i]),(int)obj_loc);
-      screen_area_puts(ge->descript,str);
+  for (i=0;i<MAX_ID;i++){
+    if ((object = game_get_object(game,i)) != NULL){
+      obj_loc = game_get_object_location(game,object);
+      if (obj_loc != NO_ID){
+        sprintf(str,"%s:%d",object_get_name(object),(int)obj_loc);
+        screen_area_puts(ge->descript,str);
+      }
     }
   }
 
@@ -272,11 +281,13 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->player_info,str);
   /*Se encarga de recorrer el array de objetos y ver si el player tiene ese objeto,
     si lo tiene, lo muestra en otra pantalla (player_info)*/
-  for (i=0;i<MAX_ID && game->objects[i] != NULL; i++){
-    obj_loc = game_get_object_player(game,game->objects[i]);
-    if (obj_loc ==TRUE){
-      sprintf(str,"  %s",object_get_name(game->objects[i]));
-      screen_area_puts(ge->player_info,str);
+  for (i=0;i<MAX_ID; i++){
+    if ((object = game_get_object(game,i)) != NULL){
+      obj_loc = game_get_object_player(game,object);
+      if (obj_loc ==TRUE){
+        sprintf(str,"  %s",object_get_name(object));
+        screen_area_puts(ge->player_info,str);
+      }
     }
   }
 
@@ -304,7 +315,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
 
 
-  cuenta_atras = dice_get_last_shot(game->dice);
+  cuenta_atras = dice_get_last_shot(game_get_dice(game));
   sprintf(str, "Last throw (dice): %d",cuenta_atras);
   screen_area_puts(ge->descript,str);
 

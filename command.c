@@ -3,7 +3,7 @@
 *
 *@file command.c
 *@author FJNR & AMH & CMF & MLRfffsgs
-*@version 1.0
+*@version 1.0aadsf
 *@date 01/02/2018
 *@copyright GNU Public License
 */

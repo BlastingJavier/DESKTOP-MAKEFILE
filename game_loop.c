@@ -19,7 +19,7 @@
  * @return, 0 o 1, dependiendo del error
  */
 int main(int argc, char *argv[]){
-  Game game; /*De tipo game (No puntero)*/
+  Game *game; /*De tipo game puntero (ya que ahora es opaco)*/
   T_Command command = NO_CMD;
   Graphic_engine *gengine;
   char parametro[WORD_SIZE+1] = " "; /*parametro para meter objeto (cogerlo)*/
@@ -53,19 +53,19 @@ int main(int argc, char *argv[]){
   }
   /*En caso de que el graphic_engine no pueda crearse saltara
     por pantalla un error y se liberara memoria*/
-  game_set_parametro(&game,parametro);
+  game_set_parametro(game,parametro);
 	if ((gengine = graphic_engine_create()) == NULL){
     fprintf(stderr, "Error while initializing graphic engine.\n");
-    game_destroy(&game);
+    game_destroy(game);
 
     return 1;
   }
   /*Esta función evita que el juego termine, a excepción de que el
     jugador pulse "EXIT"*/
-	while ((command != EXIT) && !game_is_over(&game)){
-		graphic_engine_paint_game(gengine, &game);
+	while ((command != EXIT) && !game_is_over(game)){
+		graphic_engine_paint_game(gengine,game);
     command = get_user_input(parametro);
-    game_update(&game, command,parametro,pf);
+    game_update(game, command,parametro,pf);
   }
 
   /* Cuando el bucle termina, libera memoria con game_destroy y graphic_engine_destroy,
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
     fclose (pf);
   }
 
-  game_destroy(&game);
+  game_destroy(game);
 	graphic_engine_destroy(gengine);
 
 return 0;

@@ -22,7 +22,7 @@
 
 
 /**
- * @brief Estructura que define un conjunto(características) 
+ * @brief Estructura que define un conjunto(características)
 */
 struct _Set {
   Id id_array[MAX_ID]; /*!< Identificador del stack*/
@@ -83,7 +83,7 @@ void set_destroy (Set * set){
  */
 STATUS set_push_id (Set *set , Id id){
 
-  if (set == NULL || id == NO_ID){
+  if (set == NULL || id == NO_ID || set_ISFull(set) == TRUE){
     return ERROR;
   }
   /*mete el id en el tope*/
@@ -152,7 +152,7 @@ STATUS set_print(Set* set) {
  * @param num_array_actual_para (int) que indica la posicion
  * @return Id (id_aux) identificador de la posicion
  */
-Id get_specific_id (Set *set ,int num_array_actual_para){
+Id set_get_specific_id (Set *set ,int num_array_actual_para){
   Id id_aux;
   if (set == NULL|| num_array_actual_para < 0 || num_array_actual_para > set->num_array_actual || set_ISempty(set) == TRUE){
     return NO_ID;
@@ -199,6 +199,23 @@ BOOL set_ISempty(Set *set){
   return FALSE;
 }
 
+/**
+ * @author  Carlos Miret
+ * @brief Comprueba si Set esta Lleno (tiene alguna id)
+ * @param set, puntero a set
+ * @return status OK o ERROR
+ */
+ BOOL set_ISFull(Set *set){
+   if (set == NULL){
+     return FALSE;
+   }
+   if (set->num_array_actual == MAX_ID){
+     return TRUE;
+   }
+
+   return FALSE;
+ }
+
 
 
 /**
@@ -208,7 +225,7 @@ BOOL set_ISempty(Set *set){
  * @param id Identificador
  * @return status OK o ERROR
  */
-STATUS delete_id (Set *set, Id id){
+STATUS set_delete_id (Set *set, Id id){
   int i,j;
   Id id_aux;
   STATUS flag = ERROR;
@@ -217,7 +234,7 @@ STATUS delete_id (Set *set, Id id){
   }
   /*Lineas generales: encuentra id en el array y lo elimina (con mecanica parecida a pop)*/
   for (i=0; i<set->num_array_actual;i++){
-    id_aux = get_specific_id (set, i);
+    id_aux = set_get_specific_id (set, i);
     if(id == id_aux){
       for (j=i;j+1<MAX_ID && set->id_array[j] != NO_ID;j++){
         set->id_array[j] = set->id_array[j+1];

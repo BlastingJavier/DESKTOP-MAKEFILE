@@ -17,7 +17,7 @@
 #include "types.h"
 
 /**
- * @brief Estructura que define un conjunto(características) 
+ * @brief Estructura que define un conjunto(características)
 */
 typedef struct _Set Set;
 
@@ -84,7 +84,7 @@ STATUS set_print(Set* set);
  * @param num_array_actual_para (int) que indica la posicion
  * @return Id (id_aux) identificador de la posicion
  */
-Id get_specific_id (Set *set ,int num_array_actual_para);
+Id set_get_specific_id (Set *set ,int num_array_actual_para);
 
 
 
@@ -108,13 +108,23 @@ BOOL set_ISempty(Set *set);
 
 
 /**
+ * @author  Carlos Miret
+ * @brief Comprueba si Set esta Lleno (tiene alguna id)
+ * @param set, puntero a set
+ * @return status OK o ERROR
+ */
+ BOOL set_ISFull(Set *set);
+
+
+
+/**
  * @author Carlos Miret
  * @brief Elimina una id del set la que se quiera (parametro)
  * @param set, puntero a set
  * @param id Identificador
  * @return status OK o ERROR
  */
-STATUS delete_id (Set *set, Id id);
+STATUS set_delete_id (Set *set, Id id);
 
 
 #endif

@@ -1,2 +1,5 @@
 *.[ao]
-*log.dat
+*.dat
+!data.dat
+game_loop_exe
+dice_test_exe

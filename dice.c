@@ -7,7 +7,7 @@
 *@version 1.0
 *@date 03/02/2018
 *@copyright GNU Public License
-*/ 
+*/
 
 #include <stdio.h>
 #include <stdlib.h>

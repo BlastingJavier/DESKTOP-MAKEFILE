@@ -13,11 +13,11 @@
 #include <string.h>
 #include "command.h"
 
-#define CMD_LENGHT 128 /*Longuitud maxima de comando*/
+#define CMD_LENGHT 128 /*Longitud maxima de comando*/
 #define N_CMD 10 /*Numero maximo de comandos*/
 
-/** 
- * @brief Puntero a char, es una tabla de comandos que el jugador introduce por pantalla 
+/**
+ * @brief Puntero a char, es una tabla de comandos que el jugador introduce por pantalla
 */
 char *cmd_to_str[N_CMD] = {"No command", "Unknown", "Exit", "Following", "Previous","Left","Right","Get","Drop","dice_roll"};
 /**

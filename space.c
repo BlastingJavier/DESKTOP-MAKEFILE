@@ -546,7 +546,7 @@ BOOL object_check_in_space (Space *space , Id id_objeto){
   }
   /*Busca en todos los id del set si encuentra el objeto (id) pasado por argumento*/
   for (i=0;i<MAX_ID;i++){
-    id_aux = get_specific_id(aux,i);
+    id_aux = set_get_specific_id(aux,i);
     if (id_aux !=NO_ID){
       if(id_aux == id_objeto){
 

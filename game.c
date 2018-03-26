@@ -20,6 +20,7 @@
 #include "set.h"
 #include "space.h"
 #include "dice.h"
+#include "inventory.h"
 
 /*Evitar numeros "magicos" por el codigo*/
 
@@ -496,19 +497,19 @@ Id game_get_object_location(Game* game,Object *object) {
 BOOL game_get_object_player(Game* game , Object* object){
   int i;
   Id id_player_aux , id_obj_aux;
-  Set *set;
+  Inventory *inventory;
 
   if (!game || !object){
     return FALSE;
   }
   /* Coge el id del objeto, para despues comparar los auxiliares de objeto y jugador*/
   id_obj_aux = object_get_id(object);
-  set = player_get_inventory_items(game->player);
+  inventory = player_get_inventory_items(game->player);
   /*Se recorre el array de objetos hasta el tope (del Set)*/
-  for (i=0;i<set_get_top(set);i++){
+  for (i=0;i<inventory_get_actual_set_top(inventory);i++){
     /*Cada vez que se entra en el bucle, el id del jugador toma el id especifico del
       set y compara con el del objeto pasado por referencia. Si coinciden, hay objeto*/
-    id_player_aux = set_get_specific_id(set,i);
+    id_player_aux = inventory_get_specific_id(inventory,i);
 
     if (id_player_aux == id_obj_aux){
       return TRUE;
@@ -828,19 +829,20 @@ void game_callback_drop(Game* game) {
   int i;
   Id current_id = NO_ID;
   Set * set= NULL;
-  Set *p_player_set = NULL;
+  Inventory *p_player_inventory = NULL;
   Object* p_object =NULL;
   Space *current_space = NULL;
   Id id_object = NO_ID;
   current_id = game_get_player_location(game);
 
-  p_player_set = player_get_inventory_items(game->player);
-  if (set_ISempty(p_player_set) == TRUE){
+  p_player_inventory = player_get_inventory_items(game->player);
+
+  if (set_ISempty(inventory_get_set(p_player_inventory))==TRUE){
     game->flag_command = ERROR;
     return;
   }
-
   current_id = game_get_player_location(game);
+
 
   if (NO_ID == current_id) {
     game->flag_command = ERROR;
@@ -864,7 +866,7 @@ void game_callback_drop(Game* game) {
     game->flag_command = ERROR;
     return;
   }
-  if (set_delete_id(p_player_set ,id_object) == ERROR){
+  if (inventory_delete_object(p_player_inventory ,id_object) == ERROR){
     game->flag_command = ERROR;
     return;
   }

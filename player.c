@@ -16,6 +16,7 @@
 #include "object.h"
 #include "space.h"
 #include "player.h"
+#include "inventory.h"
 
 
 /**
@@ -25,7 +26,7 @@ struct _Player {
   Id player_id; /*!< Identificador del jugador*/
   char name[WORD_SIZE+1]; /*!< Nomdre del jugador*/
   Id space_id;/*!< Identificador del espacio done esta el jugador*/
-  Set *inventory_items;/*!< Set de los objetos del jugador*/
+  Inventory *inventory_items;/*!< Set de los objetos del jugador*/
 };
 
 
@@ -49,7 +50,7 @@ Player* player_create (Id id){
   }
   /*No es necesario incicializar un nombre por ahora*/
   newPlayer->player_id=id;
-  newPlayer->inventory_items= set_create();
+  newPlayer->inventory_items= inventory_create();
 
   return newPlayer;
 }
@@ -66,7 +67,7 @@ STATUS player_destroy (Player* player){
   if(!player){
     return ERROR;
   }
-  set_destroy(player->inventory_items);
+  inventory_destroy(player->inventory_items);
   free(player);
 
   return OK;
@@ -131,7 +132,7 @@ const char * player_get_name(Player* player) {
  * @param player: puntero a Player.
  * @return player->inventory_items (puntero a Set)
  */
-Set *player_get_inventory_items (Player *player){
+Inventory *player_get_inventory_items (Player *player){
   if (player == NULL ||player->inventory_items == NULL){
     return NULL;
   }
@@ -171,15 +172,35 @@ Id player_get_id(Player * player){
 
 /**
  * @author Miguel Angel Lianno
- * @brief Quita un objeto al jugador
- * @param pla: puntero a player.
+ * @brief Quita un objeto al jugador con un id especifico
+ * @param player: puntero a player.
+ * @param id_object , Id
  * @return status OK o ERROR
  */
-STATUS player_delete_inventory_item(Player *player){
+STATUS player_delete_inventory_item_by_id(Player *player,Id id_object){
+  if (player==NULL || id_object == NO_ID){
+    return ERROR;
+  }
+  if (inventory_delete_object(player->inventory_items,id_object)==ERROR){
+    return ERROR;
+  }
+
+  return OK;
+}
+
+
+
+/**
+ * @author Miguel Angel Lianno
+ * @brief Quita un objeto al jugador(FUNCIONALIDAD ANTIGUA - NO QUITAR)
+ * @param player: puntero a player.
+ * @return status OK o ERROR
+ */
+STATUS player_delete_a_inventory_item(Player *player){
   if (player==NULL){
     return ERROR;
   }
-  if (set_pop_id(player->inventory_items)==NO_ID){
+  if (inventory_pop_a_object(player->inventory_items)==NO_ID){
     return ERROR;
   }
 
@@ -191,19 +212,40 @@ STATUS player_delete_inventory_item(Player *player){
 /**
  * @author Miguel Angel Lianno
  * @brief Pone un objeto al jugador
- * @param pla: puntero a player.
- * @param id: Identificador
+ * @param player: puntero a player.
+ * @param id_object: Identificador
  * @return status OK o ERROR
  */
-STATUS player_add_inventory_item(Player *player , Id id){
-  if (!player || id == NO_ID){
+STATUS player_add_inventory_item(Player *player , Id id_object){
+  if (!player || id_object == NO_ID){
     return ERROR;
   }
-  if(set_push_id(player->inventory_items,id)==ERROR){
+  if(inventory_add_object(player->inventory_items,id_object)==ERROR){
+    fprintf(stdout,"kebab amigo");
     return ERROR;
   }
   return OK;
 }
+
+
+
+/**
+ * @author Miguel Angel Lianno
+ * @brief Mira si hay un objeto especifico en el inventario
+ * @param player: puntero a player.
+ * @param id_object: Identificador
+ * @return status TRUE o FALSE
+ */
+BOOL player_ask_inventory_item(Player *player,Id id_object){
+  if (!player || id_object == NO_ID){
+    return FALSE;
+  }
+  if(inventory_id_in(player->inventory_items,id_object)==FALSE){
+    return FALSE;
+  }
+  return TRUE;
+}
+
 
  /**
  * USO ALTERNATIVO ==> PLAYER PRINT: Control de errores Debugging

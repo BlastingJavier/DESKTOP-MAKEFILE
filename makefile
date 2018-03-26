@@ -12,7 +12,7 @@ OBJECTSGRAPHIC = graphic_engine.o
 OBJECTSSCREEN = screen.o
 OBJECTSSPACE = space.o
 OBJECTSDICE = dice_test.o dice.o
-OBJECTSINVENTORY = inventory,o
+OBJECTSINVENTORY = inventory.o
 ##HAY QUE PONER MAS
 ##########################################################
 DIST_NAME = GAME_PROJECT_MORPHEUS
@@ -37,7 +37,7 @@ game_loop.o:game_loop.c graphic_engine.h
 	$(CC) $(CFLAGS) -c game_loop.c
 command.o:command.c command.h
 	$(CC) $(CFLAGS) -c command.c
-game.o: game.c game.h command.h space.h game_reader.h player.h object.h set.h dice.h
+game.o: game.c game.h command.h space.h game_reader.h player.h object.h set.h dice.h inventory.h
 	$(CC) $(CFLAGS) -c game.c
 graphic_engine.o :graphic_engine.c graphic_engine.h screen.h game.h dice.h types.h
 	$(CC) $(CFLAGS) -c graphic_engine.c

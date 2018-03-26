@@ -14,7 +14,7 @@
 #include "link.h"
 
 /**
- * @author Miguel Ángel Liaño y Alejandro Martin Herrera
+ * @author Miguel Ángel Liaño
  * @brief Se encarga de comprobar el correcto funcionamiento del módulo link
  * @param los agumentos del main (argc y argv)
  * @return, 0,1,2,3 o 4, dependiendo del numero de errores
@@ -48,6 +48,17 @@ int main (int argc , char *argv[]){
   link_set_bool_state(link1, TRUE);
   link_set_bool_state(link2, FALSE);
   link_set_bool_state(link3, TRUE);
+
+  link_set_id_space1(link1, 1);
+  link_set_id_space1(link2, 2);
+  link_set_id_space1(link3, 3);
+  link_set_id_space2(link1, 2);
+  link_set_id_space2(link2, 3);
+  link_set_id_space2(link3, 4);
+
+  link_print(link1);
+  link_print(link2);
+  link_print(link3);
 
   link_destroy(link1);
   link_destroy(link2);

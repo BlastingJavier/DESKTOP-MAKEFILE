@@ -50,9 +50,60 @@ STATUS inventory_add_object(Inventory *inventory ,Id id_object);
  * @brief Comprueba si el id de un objeto esta en ele inventario
  * @param inventory , puntero a Inventory
  * @param id_object ,Id
- * @return OK o ERROR status
+ * @return FALSE o TRUE status
  */
 BOOL inventory_id_in(Inventory *inventory ,Id id_object);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Coje un id del inventario haciendo uso de un conjunto
+ * @param inventory , puntero a Inventory
+ * @param numero_max_objects_aux,int
+ * @return Id , id_aux(variable local) o NO_ID
+ */
+Id inventory_get_specific_id(Inventory *inventory,int numero_max_objects_aux);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Elimina un objeto del inventario
+ * @param inventory , puntero a Inventory
+ * @param id_object ,Id
+ * @return OK o ERROR status
+ */
+STATUS inventory_delete_object(Inventory *inventory , Id id_object);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief coge un objeto del inventario
+ * @param inventory , puntero a Inventory
+ * @return id , ID
+ */
+Id inventory_pop_a_object(Inventory* inventory);
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene el top actual del set que se utiliza como inventario
+ * @param inventory , puntero a Inventory
+ * @return int 0 o top (tipo int)
+ */
+int inventory_get_actual_set_top(Inventory *inventory);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene el set del inventario
+ * @param inventory , puntero a Inventory
+ * @return un set
+ */
+Set * inventory_get_set(Inventory* inventory);
 
 
 

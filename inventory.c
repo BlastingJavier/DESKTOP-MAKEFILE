@@ -27,7 +27,7 @@ Inventory* inventory_create(){
   }
 
   new_Inventory->numero_max_objects = 0;
-  new_Inventory->set = NULL;
+  new_Inventory->set = set_create();
 
   return new_Inventory;
 }
@@ -93,7 +93,7 @@ STATUS inventory_add_object(Inventory *inventory ,Id id_object){
  * @brief Comprueba si el id de un objeto esta en el inventario
  * @param inventory , puntero a Inventory
  * @param id_object ,Id
- * @return OK o ERROR status
+ * @return FALSE o TRUE status
  */
 BOOL inventory_id_in(Inventory *inventory ,Id id_object){
   int i;
@@ -114,6 +114,102 @@ BOOL inventory_id_in(Inventory *inventory ,Id id_object){
   return FALSE;
 }
 
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Coje un id del inventario haciendo uso de un conjunto
+ * @param inventory , puntero a Inventory
+ * @param numero_max_objects_aux,int
+ * @return Id , id_aux(variable local) o NO_ID
+ */
+Id inventory_get_specific_id(Inventory *inventory,int numero_max_objects_aux){
+  Id id_aux;
+  if (inventory == NULL|| numero_max_objects_aux < 0 || (numero_max_objects_aux > set_get_top(inventory->set)) || set_ISempty(inventory->set) == TRUE){
+    return NO_ID;
+  }
+  id_aux = set_get_specific_id(inventory->set,numero_max_objects_aux);
+
+
+  return id_aux;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Elimina un objeto del inventario
+ * @param inventory , puntero a Inventory
+ * @param id_object ,Id
+ * @return OK o ERROR status
+ */
+STATUS inventory_delete_object(Inventory *inventory , Id id_object){
+  if (!inventory || id_object == NO_ID){
+    return ERROR;
+  }
+  if (set_delete_id(inventory->set,id_object)==ERROR){
+    return ERROR;
+  }
+
+  return OK;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief coge un objeto del inventario
+ * @param inventory , puntero a Inventory
+ * @return id , ID
+ */
+Id inventory_pop_a_object(Inventory* inventory){
+  Id id_aux;
+  if (!inventory){
+    return NO_ID;
+  }
+  id_aux = set_pop_id(inventory->set);
+  if (id_aux == NO_ID){
+    return NO_ID;
+  }
+  return id_aux;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene el top actual del set que se utiliza como inventario
+ * @param inventory , puntero a Inventory
+ * @return int 0 o top (tipo int)
+ */
+int inventory_get_actual_set_top(Inventory *inventory){
+  int top;
+  if (!inventory){
+    return 0;
+  }
+  top = set_get_top(inventory->set);
+  if (top == 0){
+    return 0;
+  }
+
+  return top;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene el set del inventario
+ * @param inventory , puntero a Inventory
+ * @return un set
+ */
+Set * inventory_get_set(Inventory* inventory){
+  if (!inventory){
+    return NULL;
+  }
+
+  return inventory->set;
+}
 
 
 

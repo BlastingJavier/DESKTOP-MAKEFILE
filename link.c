@@ -141,23 +141,6 @@ Link* link_create(){
 
  /**
   * @author Miguel Ángel Liaño
-  * @brief Establece el identificador de uno de los espacios a enlazar
-  * @param : puntero a link.
-  * @param id: campo de Id (identificador)
-  * @return status OK o ERROR o NO_ID
-  */
- STATUS link_set_id_space1(Link *link, Id id) {
-   if (!link || id == NO_ID) {
-     return ERROR;
-   }
-   link->space1 = id;
-   return OK;
- }
-
-
-
- /**
-  * @author Miguel Ángel Liaño
   * @brief Establece el identificador del otro espacio a enlazar
   * @param : puntero a link.
   * @param id: campo de Id (identificador)
@@ -169,6 +152,20 @@ Link* link_create(){
    }
    link->space2 = id;
    return OK;
+ }
+
+
+ /**
+  * @author Miguel Ángel Liaño
+  * @brief Devuelve el identificador del enlace dado por argumento
+  * @param Link: puntero a link, contenedor del id devuelto.
+  * @return id, el id del link o NO_ID si hay error.
+  */
+ Link *link_get_id(Id id_link) {
+   if (id_link == NO_id) {
+     return NULL;
+   }
+   return link->link_id;
  }
 
 
@@ -245,9 +242,13 @@ Link* link_create(){
 
    fprintf(stdout,"El nombre del link es: %s", lk->link_name);
    fprintf(stdout,"\nEl id del link es: %ld", lk->link_id);
-   fprintf(stdout,"\nEl primer campo del link es: %ld", lk->space1);
-   fprintf(stdout,"\nEl segundo campo del link es: %ld", lk->space2);
-   fprintf(stdout,"\nEl estado del enlace es: %d", lk->link_state);
+   fprintf(stdout,"\nId del primer espacio enlazado: %ld", lk->space1);
+   fprintf(stdout,"\nId del segundo espacio enlazado: %ld", lk->space2);
+   if(lk->link_state == 0 )
+     fprintf(stdout,"\nEl estado del enlace es: %d (Cerrado)\n", lk->link_state);
+   else
+     fprintf(stdout,"\nEl estado del enlace es: %d (Abierto)\n", lk->link_state);
+
 
    return OK;
  }

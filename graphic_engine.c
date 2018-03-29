@@ -120,6 +120,15 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   Space* space_actual = NULL;
   Space *space_next = NULL;
   Space *space_previous = NULL;
+
+  Link *possible_link_actual = NULL;
+  Link *possible_link_next = NULL;
+  Link *possible_link_previous = NULL;
+
+  Id id_space_connection1 = NO_ID;
+  Id id_space_connection2 = NO_ID;
+  Id id_link = NO_ID;
+
   char* obj[NUM_OBJ];/*Array de objetos*/
   char str[255];
   T_Command last_cmd = UNKNOWN;
@@ -134,10 +143,16 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       y el id de las casillas anterior (id_back) y posterior (id_next) respecto
       del jugador */
     space_actual = game_get_space(game, id_act);
-    id_back = space_get_north(space_actual);
-    id_next = space_get_south(space_actual);
-    id_left = space_get_west(space_actual);
-    id_right = space_get_east(space_actual);
+    possible_link_actual = game_get_link(game,id_act);
+
+    id_back = space_get_link_north(space_actual);
+    id_next = space_get_link_south(space_actual);
+    id_left = space_get_link_west(space_actual);
+    id_right = space_get_link_east(space_actual);
+
+    id_space_connection1 = link_get_id_space1(possible_link_actual);
+    id_space_connection2 = link_get_id_space2 (possible_link_actual);
+    id_link = link_get_id(possible_link_actual);
 
     for (i=0;i<NUM_OBJ;i++){
       /*3 espacios porque es lo que ocupa nuestro nombre de objeto en data.dat*/
@@ -155,6 +170,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     /*Casilla anterior (efecto de refresco)*/
     if (id_back != NO_ID) {
       space_previous = game_get_space(game,id_back);
+      possible_link_previous = game_get_link(game,id_back);
+
       gdesc[0] = space_get_gdesc1(space_previous);
       gdesc[1] = space_get_gdesc2(space_previous);
       gdesc[2] = space_get_gdesc3(space_previous);
@@ -169,9 +186,9 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       screen_area_puts(ge->map, str);
       sprintf(str, "  +-------------------+");
       screen_area_puts(ge->map, str);
-      sprintf(str, "        ^");
+      sprintf(str, "        ^%2d",(int)id_link);
       screen_area_puts(ge->map, str);
-  }
+    }
 
     for (i=0;i<NUM_OBJ;i++){
       obj[i] = "   ";
@@ -188,21 +205,30 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     /*Casilla actual (efecto de refresco)*/
     if (id_act != NO_ID) {
       space_actual = game_get_space(game,id_act);
+      possible_link_actual = game_get_link(game,id_act);
+
       gdesc[0] = space_get_gdesc1(space_actual);
       gdesc[1] = space_get_gdesc2(space_actual);
       gdesc[2] = space_get_gdesc3(space_actual);
-      sprintf(str, "  +-------------------+");
-      screen_area_puts(ge->map, str);
+
       if (id_act != NO_ID && id_left != NO_ID && id_right !=NO_ID){
-        sprintf(str, " <| 8D             %2d |>",(int) id_act);
+        sprintf(str, "  +-------------------+%2d",(int)id_link);
+        screen_area_puts(ge->map, str);
+        sprintf(str, "%2d<--| 8D             %2d |-->%2d",(int)id_space_connection1,(int) id_act,(int)id_space_connection2);
       }
       else if(id_act !=NO_ID && id_left == NO_ID && id_right != NO_ID){
-        sprintf(str, "  | 8D             %2d |>",(int) id_act);
+        sprintf(str, "  +-------------------+%2d",(int)id_link);
+        screen_area_puts(ge->map, str);
+        sprintf(str, "  | 8D             %2d |-->%2d",(int) id_act,(int)id_space_connection2);
       }
       else if(id_act !=NO_ID && id_left != NO_ID && id_right == NO_ID){
-        sprintf(str, " <| 8D             %2d |",(int) id_act);
+        sprintf(str, " %2d +-------------------+",(int)id_link);
+        screen_area_puts(ge->map, str);
+        sprintf(str, "%2d<--| 8D             %2d |",(int)id_space_connection1,(int) id_act);
       }
       else {
+        sprintf(str, "  +-------------------+");
+        screen_area_puts(ge->map, str);
         sprintf(str, "  | 8D             %2d |",(int) id_act);
       }
       screen_area_puts(ge->map, str);
@@ -239,10 +265,12 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     /*Casilla siguiente (efecto de refresco)*/
     if (id_next != NO_ID) {
       space_next = game_get_space(game,id_next);
+      possible_link_next = game_get_link(game,id_next);
+
       gdesc[0] = space_get_gdesc1(space_next);
       gdesc[1] = space_get_gdesc2(space_next);
       gdesc[2] = space_get_gdesc3(space_next);
-      sprintf(str, "        v");
+      sprintf(str, "        v%2d",(int)id_link);
       screen_area_puts(ge->map, str);
       sprintf(str, "  +-------------------+");
       screen_area_puts(ge->map, str);

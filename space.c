@@ -16,6 +16,7 @@
 #include "space.h"
 /*Lo necesitamos por las macros y utilizacion de nuevo campo Set*objects*/
 #include "set.h"
+#include "link.h"
 
 /**
  * @brief Estructura que define un espacio (características)
@@ -23,10 +24,10 @@
 struct _Space {
   Id id; /*!< identificador del espacio*/
   char name[WORD_SIZE + 1]; /*!< Campo nombre del espacio*/
-  Id north;/*!< Id del espaacio norte*/
-  Id south;/*!< Id del espacio sur*/
-  Id east;/*!< Id del espacio este*/
-  Id west;/*!< Id del espacio oeste*/
+  Id id_link_north;
+  Id id_link_south;
+  Id id_link_west;
+  Id id_link_east;
   Id object;/*!< Id del objeto en un espacio*/
   Set *objects;/*!< Conjunto de objetos*/
   char gdesc[3][21];/*!< Matriz que define los arrays de las casillas gráficas */
@@ -72,12 +73,15 @@ Space* space_create(Id id) {
   }
   space->id = id;
 
+
   space->name[0] = '\0';
 
-  space->north = NO_ID;
-  space->south = NO_ID;
-  space->east = NO_ID;
-  space->west = NO_ID;
+  space->id_link_north = NO_ID;
+  space->id_link_south = NO_ID;
+  space->id_link_east = NO_ID;
+  space->id_link_west = NO_ID;
+
+
   /*Para crear un conjunto de id (se asignará NO_ID)*/
   space->objects = set_create();
 
@@ -135,16 +139,16 @@ STATUS space_set_name(Space* space, char* name) {
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el north
+ * @brief Pone o cambia el link north
  * @param space: puntero a Space
  * @param id: campo de Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_north(Space *space, Id id) {
+STATUS space_set_link_north(Space *space, Id id) {
   if (!space || id == NO_ID) {
     return ERROR;
   }
-  space->north = id;
+  space->id_link_north = id;
   return OK;
 }
 
@@ -152,16 +156,16 @@ STATUS space_set_north(Space *space, Id id) {
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el south
+ * @brief Pone o cambia el link south
  * @param space: puntero a Space.
  * @param id: del type Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_south(Space* space, Id id) {
+STATUS space_set_link_south(Space* space, Id id) {
   if (!space || id == NO_ID) {
     return ERROR;
   }
-  space->south = id;
+  space->id_link_south = id;
   return OK;
 }
 
@@ -169,16 +173,16 @@ STATUS space_set_south(Space* space, Id id) {
 
 /*
  * @author Alejandro Martin
- * @brief Pone o cambia el east
+ * @brief Pone o cambia el link east
  * @param space: puntero a Space.
  * @param name: puntero a char.
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_east(Space* space, Id id) {
+STATUS space_set_link_east(Space* space, Id id) {
   if (!space || id == NO_ID) {
     return ERROR;
   }
-  space->east = id;
+  space->id_link_east = id;
   return OK;
 }
 
@@ -186,20 +190,18 @@ STATUS space_set_east(Space* space, Id id) {
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el west
+ * @brief Pone o cambia el link west
  * @param space: puntero a Space.
  * @param id: del type Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_west(Space* space, Id id) {
+STATUS space_set_link_west(Space* space, Id id) {
   if (!space || id == NO_ID) {
     return ERROR;
   }
-  space->west = id;
+  space->id_link_west = id;
   return OK;
 }
-
-
 
 /*
  * @author Alejandro Martin
@@ -229,49 +231,47 @@ Id space_get_id(Space* space) {
   return space->id;
 }
 
-
-
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del norte
+ * @brief Devuelve el id del link del norte
  * @param space: puntero a Space.
  * @return norte, space->north o NO_ID
  */
-Id space_get_north(Space* space) {
+Id space_get_link_north(Space* space) {
   if (!space) {
     return NO_ID;
   }
-  return space->north;
+  return space->id_link_north;
 }
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del sur
+ * @brief Devuelve el id del link del sur
  * @param space: puntero a Space.
  * @return south, space->south o NO_ID
  */
-Id space_get_south(Space* space) {
+Id space_get_link_south(Space* space) {
   if (!space) {
     return NO_ID;
   }
-  return space->south;
+  return space->id_link_south;
 }
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del norte
+ * @brief Devuelve el id del link del este
  * @param space: puntero a Space.
  * @return norte, space->north o NO_ID
  */
-Id space_get_east(Space* space) {
+Id space_get_link_east(Space* space) {
   if (!space) {
     return NO_ID;
   }
-  return space->east;
+  return space->id_link_east;
 }
 
 
@@ -282,12 +282,14 @@ Id space_get_east(Space* space) {
  * @param space: puntero a Space.
  * @return west, space->west o NO_ID
  */
-Id space_get_west(Space* space) {
+Id space_get_link_west(Space* space) {
   if (!space) {
     return NO_ID;
   }
-  return space->west;
+  return space->id_link_west;
 }
+
+
 
 
 /**
@@ -306,28 +308,28 @@ STATUS space_print(Space* space) {
 
   fprintf(stdout, "--> Space (Id: %ld; Name: %s)\n", space->id, space->name);
 
-  idaux = space_get_north(space);
+  idaux = space_get_link_north(space);
   if (NO_ID != idaux) {
     fprintf(stdout, "---> North link: %ld.\n", idaux);
   } else {
     fprintf(stdout, "---> No north link.\n");
   }
 
-  idaux = space_get_south(space);
+  idaux = space_get_link_south(space);
   if (NO_ID != idaux) {
     fprintf(stdout, "---> South link: %ld.\n", idaux);
   } else {
     fprintf(stdout, "---> No south link.\n");
   }
 
-  idaux = space_get_east(space);
+  idaux = space_get_link_east(space);
   if (NO_ID != idaux) {
     fprintf(stdout, "---> East link: %ld.\n", idaux);
   } else {
     fprintf(stdout, "---> No east link.\n");
   }
 
-  idaux = space_get_west(space);
+  idaux = space_get_link_west(space);
   if (NO_ID != idaux) {
     fprintf(stdout, "---> West link: %ld.\n", idaux);
   } else {
@@ -555,4 +557,46 @@ BOOL object_check_in_space (Space *space , Id id_objeto){
     }
   }
   return FALSE;
+}
+
+
+/*----------------------------Manejo especifico de links?????????????-------------------------------*/
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Comprueba ell estado de un link (si esta abierto o no)
+ * @param link: puntero a Link.
+ * @return OK o ERROR status
+ */
+STATUS space_check_link_state(Link *link){
+  if (!link){
+    return ERROR;
+  }
+  if (link_get_bool_state(link)==FALSE){
+    return ERROR;
+  }
+
+  return OK;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Comprueba si dos espacios estan conectados por un link comun
+ * @param space1: puntero a Space.
+ * @param space2: puntero a Space.
+ * @return OK o ERROR status
+ */
+STATUS space_check_space_union(Space *space1, Space *space2){
+  if (!space1 || !space2){
+    return ERROR;
+  }
+  /*if (space_get_link_space1(space1) == space_get_link_space2(space2)){
+    return OK;
+  }*/
+
+  return ERROR;
 }

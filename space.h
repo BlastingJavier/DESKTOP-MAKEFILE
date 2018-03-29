@@ -14,6 +14,7 @@
 
 #include "types.h"
 #include "set.h"
+#include "link.h"
 
 /**
  * @brief Estructura que define un espacio (características)
@@ -21,10 +22,10 @@
 typedef struct _Space Space;
 
 /** @brief Numero maximo de espacios*/
-#define MAX_SPACES 100 
+#define MAX_SPACES 100
 
 /** @brief Primer espacio*/
-#define FIRST_SPACE 1 
+#define FIRST_SPACE 1
 
 
 
@@ -62,45 +63,45 @@ STATUS space_set_name(Space* space, char* name);
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el north
+ * @brief Pone o cambia el link north
  * @param space: puntero a Space
  * @param id: campo de Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_north(Space* space, Id id);
+STATUS space_set_link_north(Space *space, Id id);
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el south
+ * @brief Pone o cambia el link south
  * @param space: puntero a Space.
  * @param id: del type Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_south(Space* space, Id id);
+STATUS space_set_link_south(Space* space, Id id);
 
 
 
-/**
+/*
  * @author Alejandro Martin
- * @brief Pone o cambia el east
+ * @brief Pone o cambia el link east
  * @param space: puntero a Space.
  * @param name: puntero a char.
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_east(Space* space, Id id);
+STATUS space_set_link_east(Space* space, Id id);
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Pone o cambia el west
+ * @brief Pone o cambia el link west
  * @param space: puntero a Space.
  * @param id: del type Id
  * @return status OK o ERROR o NO_ID
  */
-STATUS space_set_west(Space* space, Id id);
+STATUS space_set_link_west(Space* space, Id id);
 
 
 
@@ -126,31 +127,31 @@ Id space_get_id(Space* space);
 
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del norte
+ * @brief Devuelve el id del link del norte
  * @param space: puntero a Space.
  * @return norte, space->north o NO_ID
  */
-Id space_get_north(Space* space);
+Id space_get_link_north(Space* space);
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del sur
+ * @brief Devuelve el id del link del sur
  * @param space: puntero a Space.
  * @return south, space->south o NO_ID
  */
-Id space_get_south(Space* space);
+Id space_get_link_south(Space* space);
 
 
 
 /**
  * @author Alejandro Martin
- * @brief Devuelve el id de la casilla del norte
+ * @brief Devuelve el id del link del este
  * @param space: puntero a Space.
  * @return norte, space->north o NO_ID
  */
-Id space_get_east(Space* space);
+Id space_get_link_east(Space* space);
 
 
 
@@ -160,7 +161,8 @@ Id space_get_east(Space* space);
  * @param space: puntero a Space.
  * @return west, space->west o NO_ID
  */
-Id space_get_west(Space* space);
+Id space_get_link_west(Space* space);
+
 
 
 
@@ -284,5 +286,27 @@ Set * space_get_objects(Space* space);
     con errores/si sale en el bucle de comprobación (de set_delete))
  */
 BOOL object_check_in_space (Space *space , Id id_objeto);
+/*----------------------------Manejo especifico de links?????????????-------------------------------*/
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Comprueba ell estado de un link (si esta abierto o no)
+ * @param link: puntero a Link.
+ * @return OK o ERROR status
+ */
+STATUS space_check_link_state(Link *link);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Comprueba si dos espacios estan conectados por un link comun
+ * @param space1: puntero a Space.
+ * @param space2: puntero a Space.
+ * @return OK o ERROR status
+ */
+STATUS space_check_space_union(Space *space1, Space *space2);
 
 #endif

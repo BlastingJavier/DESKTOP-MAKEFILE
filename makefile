@@ -1,7 +1,7 @@
 #####################################################
 CC=gcc
 CFLAGS= -g -Wall -pedantic -ansi
-MODULOS=game_loop_exe dice_test_exe
+MODULOS=game_loop_exe dice_test_exe link_test_exe
 #HAY QUE PONER MAS
 #########################################################
 OBJECTS = command.o game_loop.o game.o graphic_engine.o screen.o space.o player.o object.o game_reader.o set.o dice.o inventory.o link.o

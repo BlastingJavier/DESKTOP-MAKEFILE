@@ -136,7 +136,20 @@ Link* link_create(Id id){
    return lk->link_state;
  }
 
-
+ /**
+  * @author Miguel Ángel Liaño
+  * @brief Establece el identificador de uno de los espacios a enlazar
+  * @param : puntero a link.
+  * @param id: campo de Id (identificador)
+  * @return status OK o ERROR o NO_ID
+  */
+ STATUS link_set_id_space1(Link *link, Id id){
+   if (!link || id == NO_ID) {
+     return ERROR;
+   }
+   link->space1 = id;
+   return OK;
+ }
 
  /**
   * @author Miguel Ángel Liaño
@@ -151,20 +164,6 @@ Link* link_create(Id id){
    }
    link->space2 = id;
    return OK;
- }
-
-
- /**
-  * @author Miguel Ángel Liaño
-  * @brief Devuelve el identificador del enlace dado por argumento
-  * @param Link: puntero a link, contenedor del id devuelto.
-  * @return id, el id del link o NO_ID si hay error.
-  */
- Link *link_get_id(Id id_link) {
-   if (id_link == NO_id) {
-     return NULL;
-   }
-   return link->link_id;
  }
 
 

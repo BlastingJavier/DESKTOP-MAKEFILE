@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include "link.h"
 #include "types.h"
-#define MAXLINK 250
 #define LINKNAME 50
 
 /**
@@ -20,11 +19,11 @@
 */
 
 struct _Link {
-Id link_id;/*Identificador del enlace*/
-char link_name[LINKNAME];/*Nombre del enlace*/
-Id space1;/*Identificador de uno de los espacios enlazados*/
-Id space2;/*Identificador del otro espacio enlazado*/
-BOOL link_state;/*Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
+  Id link_id;/*Identificador del enlace*/
+  char link_name[LINKNAME];/*Nombre del enlace*/
+  Id space1;/*Identificador de uno de los espacios enlazados*/
+  Id space2;/*Identificador del otro espacio enlazado*/
+  BOOL link_state;/*Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
 };
 
 
@@ -35,7 +34,7 @@ BOOL link_state;/*Si es FALSE, significa que el estado del enlace es abierto, si
    que será el encargado de manejar los enlaces
  * @return el link creado
  */
-Link* link_create(){
+Link* link_create(Id id){
   Link *lk;
 
   lk = (Link*) malloc (sizeof(Link));
@@ -44,7 +43,7 @@ Link* link_create(){
   }
   else {
     lk->link_name[0] = '\0';
-    lk->link_id = NO_ID;
+    lk->link_id = id;
     lk->space1 = NO_ID;
     lk->space2 = NO_ID;
   }

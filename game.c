@@ -21,6 +21,7 @@
 #include "space.h"
 #include "dice.h"
 #include "inventory.h"
+#include "link.h"
 
 /*Evitar numeros "magicos" por el codigo*/
 
@@ -62,6 +63,7 @@ struct _Game {
   Player* player; /*!< Campo del Jugador*/
   Object* objects[MAX_ID]; /*!< Campo del Objeto*/
   Space* spaces[MAX_SPACES + 1]; /*!< Campo de Espacios*/
+  Link *links[MAX_LINK + 1];/*!< Campo de Enlaces*/
   T_Command last_cmd; /*!< Hace referencia al ultimo comando*/
   Dice * dice;/*!< Con esto podemos utilizar el dado*/
   char* param;/*!< string (control de descripcion grafica)*/
@@ -165,6 +167,10 @@ STATUS game_create(Game** game) {
     (*game)->objects[i] = NULL;
   }
 
+  for (i=0;i<MAX_LINK;i++){
+    (*game)->links[i] = NULL;
+  }
+
   (*game)->last_cmd = NO_CMD;
   (*game)->dice =dice_create(ID_DICE);/*1*/
   (*game)->param = " ";
@@ -192,6 +198,9 @@ STATUS game_create_from_file(Game** game, char* filename) {
   if (game_reader_load_objects((*game),filename)==ERROR){
     return ERROR;
   }
+  if (game_reader_load_links((*game),filename)==ERROR){
+    return ERROR;
+  }
     /*Colocamos en casilla 0 a player y random al player*/
   game_set_player_location((*game), game_get_space_id_at((*game), INIC_P));
   return OK;
@@ -215,6 +224,10 @@ STATUS game_destroy(Game* game) {
 
   for (i=0;i<MAX_ID && game->objects[i] != NULL ;i++){
     object_destroy(game->objects[i]);
+  }
+
+  for (i=0;i<MAX_LINK && game->links[i] != NULL ;i++){
+    link_destroy(game->links[i]);
   }
 
   player_destroy(game->player);
@@ -279,6 +292,34 @@ STATUS game_add_object (Game * game , Object* object){
   game->objects[i] = object;
   return OK;
 }
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Crea un link , y anade el link pasado por parametro
+ * @param game, puntero a estructura Game (dirección)
+ * @param link , puntero a estructura Link
+ * @return status, OK O ERROR
+ */
+STATUS game_add_link (Game * game , Link *link){
+  int i;
+
+  if (game == NULL || link == NULL){
+    return ERROR;
+  }
+  for (i=0;i<MAX_LINK && game->links[i]!= NULL; i++);
+
+  if (i >= MAX_LINK){
+    return ERROR;
+  }
+  /*anade el objeto pasado por argumento*/
+  game->links[i] = link;
+  return OK;
+}
+
+
+
 
 /**
  * @author Francisco Nanclares
@@ -349,6 +390,33 @@ Object* game_get_object(Game* game, Id id){
 
   return NULL;
 }
+
+
+
+/*
+ * @author Alejandro Martin
+ * @brief Retorna el link asociandolo con un identificador
+ * @param game, puntero a estructura,(dirección)
+ * @param id, Entero (identificador)
+ * @return NULL (si el id esta corrupto, o al final de la función),
+    y el array "links", de la estructura, si coincide con el id pasado como argumento
+ */
+Link* game_get_link (Game* game, Id id){
+  int i = 0;
+
+  if (id == NO_ID) {
+    return NULL;
+  }
+
+  for (i = 0; i < MAX_LINK && game->links[i] != NULL; i++) {
+    if (id == link_get_id(game->links[i])){
+      return game->links[i];
+    }
+  }
+
+  return NULL;
+}
+
 
 
 /**
@@ -652,7 +720,7 @@ void game_callback_following(Game* game) {
     current_id = space_get_id(game->spaces[i]);
 
     if (current_id == space_id) {
-      current_id = space_get_south(game->spaces[i]);
+      current_id = space_get_link_south(game->spaces[i]);
 
       if (current_id != NO_ID) {
 	       game_set_player_location(game, current_id);
@@ -688,7 +756,7 @@ void game_callback_previous(Game* game) {
     current_id = space_get_id(game->spaces[i]);
 
     if (current_id == space_id) {
-      current_id = space_get_north(game->spaces[i]);
+      current_id = space_get_link_north(game->spaces[i]);
 
       if (current_id != NO_ID) {
 	       game_set_player_location(game, current_id);
@@ -719,7 +787,7 @@ void game_callback_left (Game *game){
   for (i=0;i<MAX_SPACES && game->spaces[i] != NULL; i++){
     current_id = space_get_id(game->spaces[i]);
     if (current_id == space_id) {
-      current_id = space_get_west(game->spaces[i]);
+      current_id = space_get_link_west(game->spaces[i]);
 
       if (current_id != NO_ID){
         game_set_player_location(game , current_id);
@@ -750,7 +818,7 @@ void game_callback_right (Game *game){
   for (i=0;i<MAX_SPACES && game->spaces[i] != NULL; i++){
     current_id = space_get_id(game->spaces[i]);
     if (current_id == space_id) {
-      current_id = space_get_east(game->spaces[i]);
+      current_id = space_get_link_east(game->spaces[i]);
 
       if (current_id != NO_ID){
         game_set_player_location(game , current_id);

@@ -17,6 +17,7 @@
 #include "player.h"
 #include "object.h"
 #include "dice.h"
+#include "link.h"
 
 typedef struct _Game Game;
 
@@ -144,6 +145,19 @@ Object* game_get_object(Game* game, Id id);
 
 
 
+
+/*
+ * @author Alejandro Martin
+ * @brief Retorna el link asociandolo con un identificador
+ * @param game, puntero a estructura,(dirección)
+ * @param id, Entero (identificador)
+ * @return NULL (si el id esta corrupto, o al final de la función),
+    y el array "links", de la estructura, si coincide con el id pasado como argumento
+ */
+Link* game_get_link (Game* game, Id id);
+
+
+
 /**
  * @author Alejandro Martin
  * @brief Devuelve la posicion del jugador (estructura game)
@@ -184,6 +198,17 @@ T_Command game_get_last_command(Game* game);
  * @return status, OK O ERROR
  */
 STATUS game_add_object (Game * game , Object* object);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Crea un link , y anade el link pasado por parametro
+ * @param game, puntero a estructura Game (dirección)
+ * @param link , puntero a estructura Link
+ * @return status, OK O ERROR
+ */
+STATUS game_add_link (Game * game , Link *link);
 
 
 

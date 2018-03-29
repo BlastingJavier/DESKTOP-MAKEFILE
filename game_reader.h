@@ -19,7 +19,7 @@
  * @author Miguel Angel Lianno
  * @brief  Lee el fichero (funcionalidad de carga de espacios)
  * @param Game, es el string destino, en el que se copia el puntero al string de tipo char, "toks"
- * @param filename, puntero a char, que es el nombre del fichero que estamos accediendo
+ * @param filename, pointer a char, que es el nombre del fichero que estamos accediendo
  * @param numcasillas , representa cuantas casillas hay en el juego (funcion de cuenta por si hace falta)
  * @return status, OK O ERROR
  */

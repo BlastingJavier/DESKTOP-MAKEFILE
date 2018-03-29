@@ -53,8 +53,13 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
   char *string2= NULL;
   char *string3= NULL;
 
+  Id id_link_north = NO_ID;
+  Id id_link_south = NO_ID;
+  Id id_link_east = NO_ID;
+  Id id_link_west = NO_ID;
+
   char string_z[20] = "                 ";/*string de NULL (si objeto == NULL)string = string_z*/
-  Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID;
+  Id id = NO_ID; /*north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID;*/
   Space* space = NULL;
   /*Suponemos OK*/
   STATUS status = OK;/*Bandera de estado*/
@@ -88,16 +93,16 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
       strcpy(name, toks);
 
       toks = strtok(NULL, "|");
-      north = atol(toks);
+      id_link_north = atol(toks);
 
       toks = strtok(NULL, "|");
-      east = atol(toks);
+      id_link_west = atol(toks);
 
       toks = strtok(NULL, "|");
-      south = atol(toks);
+      id_link_south = atol(toks);
 
       toks = strtok(NULL, "|");
-      west = atol(toks);
+      id_link_east = atol(toks);
 
       string = strtok(NULL, "|");
       string2 = strtok(NULL, "|");
@@ -107,7 +112,7 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
 
     #ifdef DEBUG /*Se ejecuta el código de dentro si debug está definido*/
 
-      printf("Leído: %ld|%s|%ld|%ld|%ld|%ld\n", id, name, north, east, south, west);
+      printf("Leído: %ld|%s|%ld|%ld|%ld|%ld\n", id, name, id_link_north, id_link_west, id_link_south, id_link_east);
 
 
     #endif
@@ -115,10 +120,11 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
       space = space_create(id);
       if (space != NULL) {
 	      space_set_name(space, name);
-	      space_set_north(space, north);
-	      space_set_east(space, east);
-	      space_set_south(space, south);
-	      space_set_west(space, west);
+	      space_set_link_north(space, id_link_north);
+	      space_set_link_east(space, id_link_east);
+	      space_set_link_south(space, id_link_south);
+	      space_set_link_west(space, id_link_west);
+
         if (string == NULL){
           space_set_gdesc1(space,string_z);
         }
@@ -205,6 +211,84 @@ STATUS game_reader_load_objects(Game* game, char* filename){
           object_set_name(object, name);
           game_add_object(game,object);
           game_set_object_location(game,space_id,object);
+        }
+    }
+  }
+  if (ferror(file)){
+    status = ERROR;
+  }
+
+  fclose(file);
+
+  return status;
+}
+
+
+
+
+/**
+ * @author Miguel Angel Lianno
+ * @brief  Lee el fichero (funcionalidad de carga de enlaces)
+ * @param Game, es el string destino, en el que se copia el puntero al string de tipo char, "toks"
+ * @param filename, puntero a char, que es el nombre del fichero que estamos accediendo
+ * @return status, OK O ERROR
+ */
+STATUS game_reader_load_links (Game *game ,char *filename){
+  FILE* file = NULL;
+  char line[WORD_SIZE] = "";
+  char name[WORD_SIZE] = "";
+  char* toks = NULL;
+
+  Id id_link = NO_ID;
+  Id space_id1 = NO_ID;
+  Id space_id2 = NO_ID;
+  BOOL link_state;
+
+  Link *link;
+  /*Suponemos OK*/
+  STATUS status = OK;
+
+  if (!filename) {
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    return ERROR;
+  }
+
+  while (fgets (line,WORD_SIZE,file)){
+    if (strncmp("#l:",line,3) ==0){
+
+      toks =strtok(line+3 , "|");
+      id_link =atol(toks);
+
+      toks = strtok(NULL,"|");
+      strcpy(name,toks);
+
+      toks = strtok(NULL,"|");
+      space_id1 = atol(toks);
+
+      toks = strtok(NULL,"|");
+      space_id2 = atol(toks);
+
+      toks = strtok(NULL,"|");
+      link_state =(BOOL)atol(toks);
+
+      #ifdef DEBUG
+
+        printf("\n\n\n\n");
+        printf ("Leido: %ld|%s|%ld|%ld estado: %d\n" ,id_link,name,space_id1,space_id2,link_state);
+      #endif
+
+        link = link_create(id_link);
+        if (link != NULL){
+          /*Si objeto se ha creado con exito se anade a el set de objetos (y se cambian atributos)*/
+          link_set_name(link, name);
+          link_set_id_space1(link,space_id1);
+          link_set_id_space2(link,space_id2);
+          link_set_bool_state(link,link_state);
+          game_add_link(game,link);
         }
     }
   }

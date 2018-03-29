@@ -37,4 +37,15 @@ STATUS game_reader_load_spaces(Game* game, char* filename);
  */
 STATUS game_reader_load_objects(Game* game, char* filename);
 
+
+
+/**
+ * @author Miguel Angel Lianno
+ * @brief  Lee el fichero (funcionalidad de carga de enlaces)
+ * @param Game, es el string destino, en el que se copia el puntero al string de tipo char, "toks"
+ * @param filename, puntero a char, que es el nombre del fichero que estamos accediendo
+ * @return status, OK O ERROR
+ */
+STATUS game_reader_load_links (Game *game ,char *filename);
+
 #endif

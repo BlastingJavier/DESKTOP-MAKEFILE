@@ -14,7 +14,7 @@
 #include "game.h"
 
 /**
- * @brief Estructura que define el Graphic_engine tamaño del area
+ * @brief Estructura  que define el Graphic_engine tamaño del area
 */
 typedef struct _Graphic_engine Graphic_engine;
 

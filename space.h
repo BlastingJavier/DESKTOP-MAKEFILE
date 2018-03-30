@@ -286,6 +286,30 @@ Set * space_get_objects(Space* space);
     con errores/si sale en el bucle de comprobación (de set_delete))
  */
 BOOL object_check_in_space (Space *space , Id id_objeto);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Cambia la descripcion de un espacio
+ * @param space: puntero a Space.
+ * @param change : puntero a char .
+ * @return status : OK o ERROR
+ */
+STATUS space_set_description(Space *space ,char* change);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Coge la descripcion del espacio
+ * @param space: puntero a Space.
+ * @return space->description : puntero a char
+ */
+char* space_get_description(Space *space);
+
+
+
 /*----------------------------Manejo especifico de links?????????????-------------------------------*/
 
 

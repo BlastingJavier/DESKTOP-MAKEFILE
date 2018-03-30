@@ -31,6 +31,7 @@ struct _Space {
   Id object;/*!< Id del objeto en un espacio*/
   Set *objects;/*!< Conjunto de objetos*/
   char gdesc[3][21];/*!< Matriz que define los arrays de las casillas gráficas */
+  char description[WORD_SIZE + 1];
 };
 /**                 Definidos en:
                         ||
@@ -80,6 +81,8 @@ Space* space_create(Id id) {
   space->id_link_south = NO_ID;
   space->id_link_east = NO_ID;
   space->id_link_west = NO_ID;
+
+  space->description[0] = '\0';
 
 
   /*Para crear un conjunto de id (se asignará NO_ID)*/
@@ -558,6 +561,39 @@ BOOL object_check_in_space (Space *space , Id id_objeto){
   }
   return FALSE;
 }
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Cambia la descripcion de un espacio
+ * @param space: puntero a Space.
+ * @param change : puntero a char .
+ * @return status : OK o ERROR
+ */
+STATUS space_set_description(Space *space ,char* change){
+  if (!space || change == NULL){
+    return ERROR;
+  }
+  strcpy(space->description,change);
+  return OK;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Coge la descripcion del espacio
+ * @param space: puntero a Space.
+ * @return space->description : puntero a char
+ */
+char* space_get_description(Space *space){
+  if (!space){
+    return NULL;
+  }
+  return space->description;
+}
+
 
 
 /*----------------------------Manejo especifico de links?????????????-------------------------------*/

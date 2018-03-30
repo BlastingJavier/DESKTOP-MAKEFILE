@@ -17,12 +17,13 @@
 #include "space.h"
 
 /**
- * @brief Estructura que define un objeto(características) 
+ * @brief Estructura que define un objeto(características)
 */
 struct _Object {
   Id id; /*!< Identificador del Objeto*/
   char name[WORD_SIZE+1]; /*!< Nombre del objeto*/
   Id location; /*!< Id del space (Donde esta el objeto)*/
+  char description[WORD_SIZE+1];
 };
 
 
@@ -169,4 +170,36 @@ STATUS object_print(Object* object) {
   fprintf(stdout, "--> Object (Id: %ld; Name: %s)\n", object->id, object->name);
 
   return OK;
+}
+
+
+
+/**
+ * @author Carlos Miret
+ * @brief Muestra modificamos la descripcion del objeto si se quiere
+ * @param objeto: puntero a Objeto.
+ * @param change : puntero a char (string)
+ * @return status, OK o ERROR
+ */
+STATUS object_set_description (Object *object,char *change){
+  if (object == NULL || change == NULL){
+    return ERROR;
+  }
+  strcpy(object->description,change);
+  return OK;
+}
+
+
+
+/**
+ * @author Carlos Miret
+ * @brief Coge el campo descripcion de un objeto
+ * @param objeto: puntero a Objeto.
+ * @return status, OK o ERROR
+ */
+char* object_get_description (Object *object){
+  if (!object){
+    return NULL;
+  }
+  return object->description;
 }

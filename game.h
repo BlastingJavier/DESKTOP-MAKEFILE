@@ -50,7 +50,7 @@ STATUS game_create_from_file(Game** game, char* filename);
  * @param cmd, enumeración (identificador de cada comando)
  * @return status, OK O ERROR
  */
-STATUS game_update(Game* game, T_Command cmd,char *param,FILE *pf);
+STATUS game_update(Game* game, T_Command cmd,char *param,char *movement,FILE *pf);
 
 
 
@@ -245,6 +245,37 @@ STATUS game_add_space(Game* game, Space* space);
 void game_set_parametro (Game * game , char *param);
 
 
+
+/**
+ * @author Francisco Nanclares
+ * @brief cogemos el parametro
+ * @param game, puntero a estructura Game (dirección)
+ * @return game->param, es de tipo puntero a char (string)
+ */
+char* game_get_parametro (Game *game);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief modificamos el movimiento
+ * @param game, puntero a estructura Game (dirección)
+ * @param movement, de tipo puntero a char (string) (el movimiento)
+ * @return nada, es de tipo void
+ */
+void game_set_movement (Game * game , char *movement);
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief cogemos el movimiento
+ * @param game, puntero a estructura Game (dirección)
+ * @return game->movement, es de tipo puntero a char (string)
+ */
+char* game_get_movement (Game *game);
+
+
+
 /**
  * @author Francisco Nanclares
  * @brief Hace flag del cmd
@@ -263,6 +294,25 @@ STATUS game_get_last_command_flag(Game *game);
  * @return dice , que es el dice de la estructura de game
  */
 Dice* game_get_dice(Game *game);
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene la descripcion de un objeto
+ * @param game, puntero a la estructura Game
+ * @return game->description_object (string)
+ */
+char* game_get_object_description(Game *game);
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene la descripcion de un espacio
+ * @param game, puntero a la estructura Game
+ * @return game->description_space (string)
+ */
+char* game_get_space_description(Game *game);
 
 
 #endif

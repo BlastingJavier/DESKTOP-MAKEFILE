@@ -46,6 +46,7 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
   FILE* file = NULL;
   char line[WORD_SIZE] = "";/*Representacion de una linea*/
   char name[WORD_SIZE] = "";
+  char description[WORD_SIZE] = "";
   char* toks = NULL;/*Token (division) de un string en una lectura*/
 
   /*strings de la primera descripcion grafica: */
@@ -104,6 +105,9 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
       toks = strtok(NULL, "|");
       id_link_east = atol(toks);
 
+      toks = strtok(NULL, "|");
+      strcpy(description,toks);
+
       string = strtok(NULL, "|");
       string2 = strtok(NULL, "|");
       string3 = strtok(NULL, "|");
@@ -124,6 +128,8 @@ STATUS game_reader_load_spaces(Game* game, char* filename) {
 	      space_set_link_east(space, id_link_east);
 	      space_set_link_south(space, id_link_south);
 	      space_set_link_west(space, id_link_west);
+
+        space_set_description(space,description);
 
         if (string == NULL){
           space_set_gdesc1(space,string_z);
@@ -171,6 +177,7 @@ STATUS game_reader_load_objects(Game* game, char* filename){
   FILE* file = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
+  char description[WORD_SIZE] = "";
   char* toks = NULL;
 
   Id id_object = NO_ID;
@@ -197,6 +204,8 @@ STATUS game_reader_load_objects(Game* game, char* filename){
       toks = strtok(NULL,"|");
       strcpy(name,toks);
       toks = strtok(NULL,"|");
+      strcpy(description,toks);
+      toks = strtok(NULL,"|");
       space_id = atol(toks);
 
       #ifdef DEBUG
@@ -211,6 +220,7 @@ STATUS game_reader_load_objects(Game* game, char* filename){
           object_set_name(object, name);
           game_add_object(game,object);
           game_set_object_location(game,space_id,object);
+          object_set_description(object,description);
         }
     }
   }
@@ -273,7 +283,7 @@ STATUS game_reader_load_links (Game *game ,char *filename){
       space_id2 = atol(toks);
 
       toks = strtok(NULL,"|");
-      link_state =(BOOL)atol(toks);
+      link_state = atol(toks);
 
       #ifdef DEBUG
 

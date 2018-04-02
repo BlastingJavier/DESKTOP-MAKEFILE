@@ -443,25 +443,72 @@ Link* game_get_link (Game* game, Id id){
  * @param name, puntero a char
  * @return
  */
-Id game_object_get_id (Game *game , char *name){
+Id game_object_get_id_by_name(Game *game , char *name){
   int i;
   char *aux;
 
   if (!game || !name ){
+    fprintf(stdout,"fallo11");
+
     return NO_ID;
   }
   for (i=0;i<MAX_ID;i++){
     /*Obtengo el nombre del objeto de todos los id posibles, con el bucle
       se lo asigno a aux que posteriormente será comparado, si el parametro
       es lo mismo se retorna el id de ese objeto*/
+      fprintf(stdout,"fallo22");
+
     aux = object_get_name(game->objects[i]);
     if (strcasecmp(name,aux)==0){
+      fprintf(stdout,"fallo33");
+
       return object_get_id(game->objects[i]);
     }
+    else {
+      return NO_ID;
+    }
   }
-
-  return NO_ID;
 }
+
+
+
+/**
+ * @author Alejandro Martin
+ * @brief Esta funcion,
+ * @param game, puntero a estructura,(dirección)
+ * @param name, puntero a char
+ * @return
+ */
+Id game_space_get_id_by_name (Game *game , char *name){
+  int i;
+  char *aux;
+
+  if (!game || !name ){
+    fprintf(stdout,"fallo1");
+    return NO_ID;
+  }
+  for (i=0;i<MAX_SPACES;i++){
+    fprintf(stdout,"fallo2");
+
+    /*Obtengo el nombre del objeto de todos los id posibles, con el bucle
+      se lo asigno a aux que posteriormente será comparado, si el parametro
+      es lo mismo se retorna el id de ese objeto*/
+    aux = space_get_name(game->spaces[i]);
+
+    if (strcasecmp(name,aux)==0){
+      fprintf(stdout,"fallo3");
+      return space_get_id(game->spaces[i]);
+    }
+    else {
+      fprintf(stdout,"va a devolver NO_ID");
+      return NO_ID;
+    }
+  }
+}
+
+
+
+
 /**
  * @author Francisco Nanclares
  * @brief funcionalidad de modificar la localizacion del jugador mediante el id
@@ -1002,7 +1049,7 @@ void game_callback_get(Game* game) {
     return;
   }
 
-  id_object = game_object_get_id(game,game->param);
+  id_object = game_object_get_id_by_name(game,game->param);
   if (id_object == NO_ID){
     game->flag_command = ERROR;
     return;
@@ -1060,7 +1107,7 @@ void game_callback_drop(Game* game) {
     return;
   }
 
-  id_object = game_object_get_id(game,game->param);
+  id_object = game_object_get_id_by_name(game,game->param);
 
   /*Set lo que hace es coger los objetos de la casilla actual
     y object recibe el objeto que tiene actualmente el jugador(Id)*/
@@ -1115,6 +1162,7 @@ void game_callback_check_info (Game *game){
   Id current_id = NO_ID;
   Space *current_space = NULL;
   Id id_object = NO_ID;
+  Id id_space = NO_ID;
   char *param;
 
   current_id = game_get_player_location(game);
@@ -1133,24 +1181,29 @@ void game_callback_check_info (Game *game){
     return;
   }
 
-  id_object = game_object_get_id(game,game->param);
+  id_object = game_object_get_id_by_name(game,game->param);
   if (id_object == NO_ID){
-    fprintf(stdout,"fallo3");
+    fprintf(stdout,"alex mi putita");
     game->flag_command = ERROR;
-    return;
   }
 
-  param = game_get_parametro(game);
-  fprintf(stdout,"%s",param);
-  if (!strcasecmp(param,"space") || !strcasecmp(param,"s")){
+  id_space = game_space_get_id_by_name(game,game->param);
+
+  if (id_space == NO_ID){
+    description_object = object_get_description(game_get_object(game,id_object));
+    strcpy(game->description_object,description_object);
+    game->flag_command = OK;
+    fprintf(stdout,"alex mi putita 2.0");
+
+  }
+  else if (1){
+    fprintf(stdout," entra aqui");
     description_space = space_get_description(game_get_space(game,current_id));
     strcpy(game->description_space,description_space);
     game->flag_command = OK;
   }
   else {
-    description_object = object_get_description(game_get_object(game,id_object));
-    strcpy(game->description_object,description_object);
-    game->flag_command = OK;
+    game->flag_command = ERROR;
   }
 
   return;

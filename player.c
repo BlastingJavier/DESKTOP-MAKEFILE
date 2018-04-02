@@ -221,7 +221,6 @@ STATUS player_add_inventory_item(Player *player , Id id_object){
     return ERROR;
   }
   if(inventory_add_object(player->inventory_items,id_object)==ERROR){
-    fprintf(stdout,"kebab amigo");
     return ERROR;
   }
   return OK;

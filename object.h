@@ -100,4 +100,25 @@ STATUS object_set_name (Object* object , char* name);
  */
 STATUS object_print(Object* object);
 
+
+
+/**
+ * @author Carlos Miret
+ * @brief Muestra modificamos la descripcion del objeto si se quiere
+ * @param objeto: puntero a Objeto.
+ * @param change : puntero a char (string)
+ * @return status, OK o ERROR
+ */
+STATUS object_set_description (Object *object,char *change);
+
+
+
+/**
+ * @author Carlos Miret
+ * @brief Coge el campo descripcion de un objeto
+ * @param objeto: puntero a Objeto.
+ * @return status, OK o ERROR
+ */
+char* object_get_description (Object *object);
+
 #endif

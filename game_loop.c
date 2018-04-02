@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
   T_Command command = NO_CMD;
   Graphic_engine *gengine;
   char parametro[WORD_SIZE+1] = " "; /*parametro para meter objeto (cogerlo)*/
+  char movement [WORD_SIZE+1] = " ";
   FILE *pf=NULL;/*puntero a file (abrir fichero log)*/
 
   /*Describe como tenemos que ejecutar el programa correctamente
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]){
   /*En caso de que el graphic_engine no pueda crearse saltara
     por pantalla un error y se liberara memoria*/
   game_set_parametro(game,parametro);
+  game_set_movement(game,movement);
 	if ((gengine = graphic_engine_create()) == NULL){
     fprintf(stderr, "Error while initializing graphic engine.\n");
     game_destroy(game);
@@ -64,8 +66,8 @@ int main(int argc, char *argv[]){
     jugador pulse "EXIT"*/
 	while ((command != EXIT) && !game_is_over(game)){
 		graphic_engine_paint_game(gengine,game);
-    command = get_user_input(parametro);
-    game_update(game, command,parametro,pf);
+    command = get_user_input(parametro,movement);
+    game_update(game, command,parametro,movement,pf);
   }
 
   /* Cuando el bucle termina, libera memoria con game_destroy y graphic_engine_destroy,

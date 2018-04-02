@@ -38,7 +38,7 @@
 /** @brief Numero de casillas (variable si modifi. data.dat)*/
 #define MAX_CASILLAS 12
 /** @brief Numero maximo de callbacks*/
-#define N_CALLBACK 9
+#define N_CALLBACK 11
 
 /**                 Definidos en:
                         ||
@@ -67,7 +67,10 @@ struct _Game {
   T_Command last_cmd; /*!< Hace referencia al ultimo comando*/
   Dice * dice;/*!< Con esto podemos utilizar el dado*/
   char* param;/*!< string (control de descripcion grafica)*/
+  char *movement;
   STATUS flag_command;/*!< Flag de status (para ver si un comando es correcto o incorrecto)*/
+  char description_object[WORD_SIZE+1];/*!< Descripcion de un objeto (para no violar la interfaz)*/
+  char description_space[WORD_SIZE+1];/*!< Descripcion de un espacio (para no violar la interfaz)*/
 };
 
 
@@ -83,16 +86,16 @@ void game_callback_unknown(Game* game);
 void game_callback_exit(Game* game);
 
 
-void game_callback_following(Game* game);
+void game_callback_south(Game* game);
 
 
-void game_callback_previous(Game* game);
+void game_callback_north(Game* game);
 
 
-void game_callback_left (Game *game);
+void game_callback_west (Game *game);
 
 
-void game_callback_right (Game *game);
+void game_callback_east (Game *game);
 
 
 void game_callback_get(Game* game);
@@ -102,6 +105,12 @@ void game_callback_drop(Game* game);
 
 
 void game_callback_roll_dice(Game *game);
+
+
+void game_callback_generic_movement(Game *game);
+
+
+void game_callback_check_info(Game *game);
 
 
 
@@ -114,13 +123,15 @@ void game_callback_roll_dice(Game *game);
 static callback_fn game_callback_fn_list[N_CALLBACK]={
   game_callback_unknown,
   game_callback_exit,
-  game_callback_following,
-  game_callback_previous,
-  game_callback_left,
-  game_callback_right,
+  game_callback_south,
+  game_callback_north,
+  game_callback_west,
+  game_callback_east,
   game_callback_get,
   game_callback_drop,
-  game_callback_roll_dice
+  game_callback_roll_dice,
+  game_callback_generic_movement,
+  game_callback_check_info
 };
 
 
@@ -174,6 +185,12 @@ STATUS game_create(Game** game) {
   (*game)->last_cmd = NO_CMD;
   (*game)->dice =dice_create(ID_DICE);/*1*/
   (*game)->param = " ";
+  (*game)->movement = " ";
+
+  (*game)->description_object[0] = '\0';
+  (*game)->description_space[0] = '\0';
+
+
 
   return OK;
 }
@@ -596,10 +613,11 @@ BOOL game_get_object_player(Game* game , Object* object){
  * @param cmd, enumeración (identificador de cada comando)
  * @return status, OK O ERROR
  */
-STATUS game_update(Game* game, T_Command cmd,char *param,FILE *pf) {
+STATUS game_update(Game* game, T_Command cmd,char *param,char *movement,FILE *pf) {
   extern char *cmd_to_str[];
   game->flag_command = ERROR;
   game->last_cmd = cmd;
+  game->movement = movement;
   game->param = param;
   (*game_callback_fn_list[cmd])(game);
   if (pf != NULL){
@@ -672,6 +690,49 @@ void game_set_parametro (Game * game , char *param){
 }
 
 
+
+/**
+ * @author Francisco Nanclares
+ * @brief cogemos el parametro
+ * @param game, puntero a estructura Game (dirección)
+ * @return game->param, es de tipo puntero a char (string)
+ */
+char* game_get_parametro (Game *game){
+  return game->param;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief modificamos el movimiento
+ * @param game, puntero a estructura Game (dirección)
+ * @param movement, de tipo puntero a char (string) (el movimiento)
+ * @return nada, es de tipo void
+ */
+void game_set_movement (Game * game , char *movement){
+  if (movement == NULL){
+    game->flag_command = ERROR;
+  }
+  game->param = movement;
+
+  game->flag_command = OK;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief cogemos el movimiento
+ * @param game, puntero a estructura Game (dirección)
+ * @return game->movement, es de tipo puntero a char (string)
+ */
+char* game_get_movement (Game *game){
+  return game->movement;
+}
+
+
+
 /**
  * @author Alejandro Martin
  * @brief Posible llamada a la finalización del juego
@@ -699,32 +760,49 @@ void game_callback_exit(Game* game) {
 
 /**
  * @author Francisco Nanclares
- * @brief Implementa la función del comando following
+ * @brief Implementa la función del comando south
  * @param game, puntero a la estructura Game
  * @return nada, ya que es una función de tipo void
  */
-void game_callback_following(Game* game) {
+void game_callback_south(Game* game) {
   int i = 0;
   Id current_id = NO_ID;/*-1*/
   Id space_id = NO_ID;/*id del jugador*/
+  Id ahorita_nomas = NO_ID;
+
+  Link *link = NULL;
+  Id origen = NO_ID;
+  Id destino = NO_ID;
+
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
     game->flag_command = ERROR;
     return;
   }
-  game->flag_command = ERROR;
 
   /*Recorre todos los espacios*/
   for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
     current_id = space_get_id(game->spaces[i]);
+    ahorita_nomas = current_id;
 
     if (current_id == space_id) {
       current_id = space_get_link_south(game->spaces[i]);
+      link = game_get_link(game,current_id);
 
-      if (current_id != NO_ID) {
-	       game_set_player_location(game, current_id);
-         game->flag_command = OK;
+      if (ahorita_nomas != NO_ID) {
+        if (link_get_bool_state(link) == FALSE){
+          origen = link_get_id_space1(link);
+          destino = link_get_id_space2(link);
+          if (destino == current_id){
+            game_set_player_location(game,origen);
+            game->flag_command = OK;
+          }
+          else {
+            game_set_player_location(game, destino);
+            game->flag_command = OK;
+          }
+        }
       }
       return;
     }
@@ -735,14 +813,19 @@ void game_callback_following(Game* game) {
 
 /**
  * @author Francisco Nanclares
- * @brief Implementa la función del comando previous
+ * @brief Implementa la función del comando north
  * @param game, puntero a la estructura Game
  * @return nada, ya que es una función de tipo void
  */
-void game_callback_previous(Game* game) {
+void game_callback_north(Game* game) {
   int i = 0;
   Id current_id = NO_ID;
   Id space_id = NO_ID;
+  Id ahorita_nomas = NO_ID;
+
+  Id origen = NO_ID;
+  Id destino = NO_ID;
+  Link * link = NULL;
 
   space_id = game_get_player_location(game);
 
@@ -750,17 +833,29 @@ void game_callback_previous(Game* game) {
     game->flag_command = ERROR;
     return;
   }
-  game->flag_command = ERROR;
 
   for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
     current_id = space_get_id(game->spaces[i]);
+    ahorita_nomas = current_id;
 
     if (current_id == space_id) {
       current_id = space_get_link_north(game->spaces[i]);
+      link = game_get_link(game,current_id);
 
       if (current_id != NO_ID) {
-	       game_set_player_location(game, current_id);
-         game->flag_command = OK;
+        if (link_get_bool_state(link) == FALSE){
+          origen = link_get_id_space1(link);
+          destino = link_get_id_space2(link);
+
+          if (destino == ahorita_nomas){
+            game_set_player_location(game,origen);
+            game->flag_command = OK;
+          }
+          else {
+            game_set_player_location(game, destino);
+            game->flag_command = OK;
+          }
+        }
       }
       return;
     }
@@ -774,23 +869,43 @@ void game_callback_previous(Game* game) {
  * @param game, puntero a la estructura Game
  * @return, ya que es una función de tipo void
  */
-void game_callback_left (Game *game){
+void game_callback_west (Game *game){
   int i;
   Id current_id = NO_ID;
   Id space_id = NO_ID;
+  Id ahorita_nomas = NO_ID;
 
+  Link *link=NULL;
+  Id origen = NO_ID;
+  Id destino=NO_ID;
   space_id = game_get_player_location (game);
 
   if (NO_ID == space_id){
+    game->flag_command = ERROR;
     return;
   }
   for (i=0;i<MAX_SPACES && game->spaces[i] != NULL; i++){
     current_id = space_get_id(game->spaces[i]);
+    ahorita_nomas = current_id;
+
     if (current_id == space_id) {
       current_id = space_get_link_west(game->spaces[i]);
+      link = game_get_link(game,current_id);
 
       if (current_id != NO_ID){
-        game_set_player_location(game , current_id);
+        if (link_get_bool_state(link) == FALSE){
+          origen = link_get_id_space1(link);
+          destino = link_get_id_space2(link);
+
+          if (destino == ahorita_nomas){
+            game_set_player_location(game , origen);
+            game->flag_command = OK;
+          }
+          else {
+            game_set_player_location(game , destino);
+            game->flag_command = OK;
+          }
+        }
       }
       return;
     }
@@ -805,23 +920,44 @@ void game_callback_left (Game *game){
  * @param game, puntero a la estructura Game
  * @return, ya que es una función de tipo void
  */
-void game_callback_right (Game *game){
+void game_callback_east (Game *game){
   int i;
   Id current_id = NO_ID;
   Id space_id = NO_ID;
+  Id ahorita_nomas = NO_ID;
+
+  Link * link = NULL;
+  Id origen = NO_ID;
+  Id destino = NO_ID;
 
   space_id = game_get_player_location (game);
 
   if (NO_ID == space_id){
+    game->flag_command = ERROR;
     return;
   }
   for (i=0;i<MAX_SPACES && game->spaces[i] != NULL; i++){
     current_id = space_get_id(game->spaces[i]);
+    ahorita_nomas = current_id;
+
     if (current_id == space_id) {
       current_id = space_get_link_east(game->spaces[i]);
+      link = game_get_link(game,current_id);
 
       if (current_id != NO_ID){
-        game_set_player_location(game , current_id);
+        if (link_get_bool_state(link)==FALSE){
+          origen = link_get_id_space1(link);
+          destino = link_get_id_space2(link);
+
+          if (destino == ahorita_nomas){
+            game_set_player_location(game , origen);
+            game->flag_command = OK;
+          }
+          else {
+            game_set_player_location(game , destino);
+            game->flag_command = OK;
+          }
+        }
       }
       return;
     }
@@ -951,6 +1087,78 @@ void game_callback_drop(Game* game) {
 
 
 /**
+ * @author Francisco Nanclares
+ * @brief Implementa la función del comando generico que llama a los demas comandos
+ * @param game, puntero a la estructura Game
+ * @return, ya que es una función de tipo void
+ */
+void game_callback_generic_movement (Game *game){
+  if (!game_get_movement(game)){
+    game->flag_command = ERROR;
+    return;
+  }
+  game->flag_command = OK;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Implementa la funcion del comando que permite obtener una descripcion
+ *  tanto de objetos como de casillas
+ * @param game, puntero a la estructura Game
+ * @return, ya que es una función de tipo void
+ */
+void game_callback_check_info (Game *game){
+  char *description_object;
+  char *description_space;
+  Id current_id = NO_ID;
+  Space *current_space = NULL;
+  Id id_object = NO_ID;
+  char *param;
+
+  current_id = game_get_player_location(game);
+
+  if (NO_ID == current_id) {
+    fprintf(stdout,"fallo1");
+    game->flag_command = ERROR;
+    return;
+  }
+
+  current_space = game_get_space(game, current_id);
+
+  if (current_space == NULL){
+    fprintf(stdout,"fallo2");
+    game->flag_command = ERROR;
+    return;
+  }
+
+  id_object = game_object_get_id(game,game->param);
+  if (id_object == NO_ID){
+    fprintf(stdout,"fallo3");
+    game->flag_command = ERROR;
+    return;
+  }
+
+  param = game_get_parametro(game);
+  fprintf(stdout,"%s",param);
+  if (!strcasecmp(param,"space") || !strcasecmp(param,"s")){
+    description_space = space_get_description(game_get_space(game,current_id));
+    strcpy(game->description_space,description_space);
+    game->flag_command = OK;
+  }
+  else {
+    description_object = object_get_description(game_get_object(game,id_object));
+    strcpy(game->description_object,description_object);
+    game->flag_command = OK;
+  }
+
+  return;
+}
+
+
+
+/**
  * @author Alejandro Martin
  * @brief Implementa la función del comando roll
  * @param game, puntero a la estructura Game
@@ -986,4 +1194,29 @@ STATUS game_get_last_command_flag(Game *game){
  */
 Dice* game_get_dice(Game *game){
   return game->dice;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene la descripcion de un objeto
+ * @param game, puntero a la estructura Game
+ * @return game->description_object (string)
+ */
+char* game_get_object_description(Game *game){
+  return game->description_object;
+}
+
+
+
+/**
+ * @author Francisco Nanclares
+ * @brief Obtiene la descripcion de un espacio
+ * @param game, puntero a la estructura Game
+ * @return game->description_space (string)
+
+ */
+char* game_get_space_description(Game *game){
+  return game->description_space;
 }

@@ -18,13 +18,15 @@ typedef enum enum_Command {
     NO_CMD = -1,
     UNKNOWN, /*0*/
     EXIT, /*1*/
-    FOLLOWING, /*etc*/
-    PREVIOUS,
-    LEFT,
-    RIGHT,
-    GET,
-    DROP,
-    DICE_ROLL
+    SOUTH, /*2*/
+    NORTH, /*3*/
+    WEST,/*4*/
+    EAST,/*5*/
+    GET,/*6*/
+    DROP,/*7*/
+    DICE_ROLL,/*8*/
+    MOVEMENT,/*9*/
+    CHECK/*10*/
 } T_Command;
 
 

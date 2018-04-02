@@ -1,4 +1,4 @@
-#s:1|Casilla 1|-1|-1|1|-1|Nada importante
+#s:1|perro|-1|-1|1|-1|Nada importante|
 #s:2|Casilla 2|1|-1|2|-1|Nada importante
 #s:3|Casilla 3|2|-1|3|-1|Nada importante
 #s:4|Casilla 4|3|-1|4|-1|Nada importante
@@ -32,7 +32,6 @@
 #o:6|Llorena|mmm todos lo sabemos|20
 #o:7|Corrientealterna|Sudores frios|21
 #o:8|Deskpot|SQUAD SHIT|22
-
 
 
 #l:1|Lnk 1|1|2|0|

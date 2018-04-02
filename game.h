@@ -157,6 +157,26 @@ Object* game_get_object(Game* game, Id id);
 Link* game_get_link (Game* game, Id id);
 
 
+/**
+ * @author Alejandro Martin
+ * @brief Esta funcion,
+ * @param game, puntero a estructura,(dirección)
+ * @param name, puntero a char
+ * @return
+ */
+Id game_object_get_id_by_name(Game *game , char *name);
+
+
+/**
+ * @author Alejandro Martin
+ * @brief Esta funcion,
+ * @param game, puntero a estructura,(dirección)
+ * @param name, puntero a char
+ * @return
+ */
+Id game_space_get_id_by_name (Game *game , char *name);
+
+
 
 /**
  * @author Alejandro Martin

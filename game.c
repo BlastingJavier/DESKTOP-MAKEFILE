@@ -1194,10 +1194,9 @@ void game_callback_check_info (Game *game){
     strcpy(game->description_object,description_object);
     game->flag_command = OK;
     fprintf(stdout,"alex mi putita 2.0");
-
   }
+
   else if (1){
-    fprintf(stdout," entra aqui");
     description_space = space_get_description(game_get_space(game,current_id));
     strcpy(game->description_space,description_space);
     game->flag_command = OK;

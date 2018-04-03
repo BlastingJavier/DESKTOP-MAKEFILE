@@ -1,5 +1,5 @@
 /**
-*@brief It defines a space
+*@brief It defines a space (interfaz)
 *
 *
 *@file space.h

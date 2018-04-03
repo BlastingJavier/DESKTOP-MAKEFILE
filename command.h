@@ -1,5 +1,5 @@
 /**
-*@brief Muestra la funcionalidad de la estructura de datos
+*@brief Muestra la funcionalidad de la estructura de datos (interfaz)
 *
 *@file command.h
 *@author FJNR & AMH & CMF & MLR

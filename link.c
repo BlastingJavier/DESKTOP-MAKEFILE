@@ -19,11 +19,11 @@
 */
 
 struct _Link {
-  Id link_id;/*Identificador del enlace*/
-  char link_name[LINKNAME];/*Nombre del enlace*/
-  Id space1;/*Identificador de uno de los espacios enlazados*/
-  Id space2;/*Identificador del otro espacio enlazado*/
-  BOOL link_state;/*Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
+  Id link_id;/*!<Identificador del enlace*/
+  char link_name[LINKNAME];/*!<Nombre del enlace*/
+  Id space1;/*!<Identificador de uno de los espacios enlazados*/
+  Id space2;/*!<Identificador del otro espacio enlazado*/
+  BOOL link_state;/*!<Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
 };
 
 

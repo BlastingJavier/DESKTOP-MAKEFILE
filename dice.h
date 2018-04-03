@@ -1,5 +1,5 @@
 /**
-*@brief Interfaz del dado
+*@brief Interfaz del dado (interfaz)
 *
 *
 *@file dice.h

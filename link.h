@@ -1,5 +1,5 @@
 /**
-*@brief Lleva a cabo el manejo de enlaces entre espacios
+*@brief Lleva a cabo el manejo de enlaces entre espacios (interfaz)
 *
 *@file link.h
 *@author FJNR & AMH & CMF & MLR
@@ -17,6 +17,7 @@
 #include <string.h>
 #include "types.h"
 
+/** @brief MAX_LINK*/
 #define MAX_LINK 250
 
 /**

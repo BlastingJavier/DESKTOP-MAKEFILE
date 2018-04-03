@@ -1,5 +1,5 @@
 /**
- * @brief Define un motor gráfico
+ * @brief Define un motor gráfico (interfaz)
  *
  * @file graphic_engine.h
  *@author FJNR & AMH & CMF & MLR

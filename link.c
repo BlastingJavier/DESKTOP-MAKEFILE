@@ -3,7 +3,7 @@
 *
 *@file link.c
 *@author FJNR & AMH & CMF & MLR
-*@version 1.0aadsf
+*@version 1.0
 *@date 26/03/2018
 *@copyright GNU Public License
 */
@@ -14,16 +14,12 @@
 #include "types.h"
 #define LINKNAME 50
 
-/**
- * @brief Estructura que lleva a cabo el manejo de enlaces entre espacios
-*/
-
 struct _Link {
-  Id link_id;/*Identificador del enlace*/
-  char link_name[LINKNAME];/*Nombre del enlace*/
-  Id space1;/*Identificador de uno de los espacios enlazados*/
-  Id space2;/*Identificador del otro espacio enlazado*/
-  BOOL link_state;/*Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
+  Id link_id;/*!<Identificador del enlace*/
+  char link_name[LINKNAME];/*!<Nombre del enlace*/
+  Id space1;/*!<Identificador de uno de los espacios enlazados*/
+  Id space2;/*!<Identificador del otro espacio enlazado*/
+  BOOL link_state;/*!<Si es FALSE, significa que el estado del enlace es abierto, si es TRUE, es cerrado*/
 };
 
 

@@ -13,8 +13,11 @@
 #include <string.h>
 #include "command.h"
 
-#define CMD_LENGHT 128 /*Longitud maxima de comando*/
-#define N_CMD 12 /*Numero maximo de comandos*/
+/** @brief Longitud maxima de comando*/
+#define CMD_LENGHT 128 
+
+/** @brief Numero maximo de comandos*/
+#define N_CMD 12 
 
 /**
  * @brief Puntero a char, es una tabla de comandos que el jugador introduce por pantalla

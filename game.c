@@ -25,9 +25,9 @@
 
 /*Evitar numeros "magicos" por el codigo*/
 
-/** @brief Id del player*/
+/** @brief Num Id del player*/
 #define ID_J 1
-/** @brief Id del objeto*/
+/** @brief NumId del objeto*/
 #define ID_O 1
 /** @brief Id del dado*/
 #define ID_DICE 1
@@ -133,12 +133,6 @@ static callback_fn game_callback_fn_list[N_CALLBACK]={
   game_callback_generic_movement,
   game_callback_check_info
 };
-
-
-/**
-  * @brief Funciones privadas, las cuales solo se ponen en el fichero.c
-*/
-
 
 
 /**
@@ -383,7 +377,7 @@ Space* game_get_space(Game* game, Id id){
 
 
 
-/*
+/**
  * @author Alejandro Martin
  * @brief Retorna el objeto (asociándola con una posición predeterminada)
     y con el id (param)
@@ -410,7 +404,7 @@ Object* game_get_object(Game* game, Id id){
 
 
 
-/*
+/**
  * @author Alejandro Martin
  * @brief Retorna el link asociandolo con un identificador
  * @param game, puntero a estructura,(dirección)
@@ -1194,9 +1188,10 @@ void game_callback_check_info (Game *game){
     strcpy(game->description_object,description_object);
     game->flag_command = OK;
     fprintf(stdout,"alex mi putita 2.0");
-  }
 
+  }
   else if (1){
+    fprintf(stdout," entra aqui");
     description_space = space_get_description(game_get_space(game,current_id));
     strcpy(game->description_space,description_space);
     game->flag_command = OK;

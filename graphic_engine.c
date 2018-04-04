@@ -91,7 +91,7 @@ Graphic_engine *graphic_engine_create(){
  * @author Francisco Nanclares
  * @brief Tiene la función de liberar la memoria de todos los campos de ge
  * @param "ge", el puntero a "Graphic_engine"
- * @return, ya que es una función de tipo void
+ * @return void
  */
 void graphic_engine_destroy(Graphic_engine *ge){
   if (!ge){
@@ -119,7 +119,7 @@ void graphic_engine_destroy(Graphic_engine *ge){
     pantalla con: (x,y,width,height))
  * @param "ge",  el puntero a "Graphic_engine"
  * @param "game", el puntero a "Game"
- * @return, ya que es una función de tipo void
+ * @return void
  */
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;/*Id*/

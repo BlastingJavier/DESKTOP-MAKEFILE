@@ -1,9 +1,22 @@
+/**
+*@brief Lleva a cabo las labores de manejo deeel inventario, contenedor de set (interfaz)
+*
+*@file inventory.h
+*@author FJNR & AMH & CMF & MLR
+*@version 1.0aadsf
+*@date 26/03/2018
+*@copyright GNU Public License
+*/
 #ifndef INVENTORY_H
 #define INVENTORY_H
 #include <stdio.h>
 #include <stdlib.h>
 #include "set.h"
 
+
+/**
+ * @brief Estrucura que para las caracteristicas del inventario
+*/
 typedef struct _Inventory Inventory;
 
 /**

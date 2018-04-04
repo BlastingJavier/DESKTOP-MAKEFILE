@@ -174,7 +174,7 @@ STATUS space_set_link_south(Space* space, Id id) {
 
 
 
-/*
+/**
  * @author Alejandro Martin
  * @brief Pone o cambia el link east
  * @param space: puntero a Space.
@@ -206,7 +206,7 @@ STATUS space_set_link_west(Space* space, Id id) {
   return OK;
 }
 
-/*
+/**
  * @author Alejandro Martin
  * @brief Devuelve el nombre (casilla)
  * @param space: puntero a Space.

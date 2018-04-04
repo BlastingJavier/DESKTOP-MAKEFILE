@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include "set.h"
 
+
+/**
+ * @brief Estrucura que para las caracteristicas del inventario
+*/
 typedef struct _Inventory Inventory;
 
 /**

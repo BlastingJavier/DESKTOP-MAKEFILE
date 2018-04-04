@@ -13,9 +13,6 @@
 #include "inventory.h"
 
 
-/**
- * @brief Estrucura que para las caracteristicas del inventario
-*/
 struct _Inventory {
   Set *set;/*!<Puntero a set (conjunto de identificadores)*/
   int numero_max_objects;/*!<Numero maximo de objetos*/

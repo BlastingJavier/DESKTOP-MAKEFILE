@@ -1,16 +1,17 @@
 /**
-*@brief Lleva a cabo las labores de manejo deeel inventario, contenedor de set
+* @brief Lleva a cabo las labores de manejo deeel inventario, contenedor de set
 *
-*@file inventory.c
-*@author FJNR & AMH & CMF & MLR
-*@version 1.0aadsf
-*@date 26/03/2018
-*@copyright GNU Public License
+* @file inventory.c
+* @author FJNR & AMH & CMF & MLR
+* @version 1.0
+* @date 26/03/2018
+* @copyright GNU Public License
 */
 #include <stdio.h>
 #include <stdlib.h>
 #include "set.h"
 #include "inventory.h"
+
 
 
 struct _Inventory {

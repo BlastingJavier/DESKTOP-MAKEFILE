@@ -37,7 +37,7 @@ Graphic_engine* graphic_engine_create();
  * @author Francisco Nanclares
  * @brief Tiene la función de liberar la memoria de todos los campos de ge
  * @param "ge", el puntero a "Graphic_engine"
- * @return void
+ * @return, ya que es una función de tipo void
  */
 void graphic_engine_destroy(Graphic_engine *ge);
 
@@ -49,7 +49,7 @@ void graphic_engine_destroy(Graphic_engine *ge);
     pantalla con: (x,y,width,height))
  * @param "ge",  el puntero a "Graphic_engine"
  * @param "game", el puntero a "Game"
- * @return void
+ * @return, ya que es una función de tipo void
  */
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game);
 

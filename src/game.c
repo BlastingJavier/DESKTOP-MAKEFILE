@@ -136,6 +136,12 @@ static callback_fn game_callback_fn_list[N_CALLBACK]={
 
 
 /**
+  * @brief Funciones privadas, las cuales solo se ponen en el fichero.c
+*/
+
+
+
+/**
  * @author Alejandro Martin
  * @brief Retorna el id de una casilla (asociándola con una posición predeterminada)
  * @param game, puntero a estructura,(dirección)

@@ -3,7 +3,7 @@
 *
 *@file link.c
 *@author FJNR & AMH & CMF & MLR
-*@version 1.0
+*@version 1.0aadsf
 *@date 26/03/2018
 *@copyright GNU Public License
 */
@@ -13,6 +13,10 @@
 #include "link.h"
 #include "types.h"
 #define LINKNAME 50
+
+/**
+ * @brief Estructura que lleva a cabo el manejo de enlaces entre espacios
+*/
 
 struct _Link {
   Id link_id;/*!<Identificador del enlace*/

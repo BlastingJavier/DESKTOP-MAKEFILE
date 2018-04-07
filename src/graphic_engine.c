@@ -91,7 +91,7 @@ Graphic_engine *graphic_engine_create(){
  * @author Francisco Nanclares
  * @brief Tiene la función de liberar la memoria de todos los campos de ge
  * @param "ge", el puntero a "Graphic_engine"
- * @return void
+ * @return, ya que es una función de tipo void
  */
 void graphic_engine_destroy(Graphic_engine *ge){
   if (!ge){
@@ -119,7 +119,7 @@ void graphic_engine_destroy(Graphic_engine *ge){
     pantalla con: (x,y,width,height))
  * @param "ge",  el puntero a "Graphic_engine"
  * @param "game", el puntero a "Game"
- * @return void
+ * @return, ya que es una función de tipo void
  */
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;/*Id*/
@@ -198,17 +198,17 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       gdesc[1] = space_get_gdesc2(space_previous);
       gdesc[2] = space_get_gdesc3(space_previous);
 
-      sprintf(str, "  | %s%2d |",gdesc[0],(int)id_space_connection_north2);
+      sprintf(str, "      | %s%2d |",gdesc[0],(int)id_space_connection_north2);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s |",gdesc[1]);
+      sprintf(str, "      | %s |",gdesc[1]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s |",gdesc[2]);
+      sprintf(str, "      | %s |",gdesc[2]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s  %s  %s  %s|",obj[0], obj[1], obj[2], obj[3]);
+      sprintf(str, "      | %s  %s  %s  %s|",obj[0], obj[1], obj[2], obj[3]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  +-------------------+");
+      sprintf(str, "      +-------------------+");
       screen_area_puts(ge->map, str);
-      sprintf(str, "        ^%2d",(int)id_link);
+      sprintf(str, "            ^%2d",(int)id_link);
       screen_area_puts(ge->map, str);
     }
 
@@ -250,28 +250,28 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
         sprintf(str, "%2d<--| 8D             %2d |",(int)id_space_connection_left2,(int)id_act);
       }
       else {
-        sprintf(str, "  +-------------------+");
+        sprintf(str, "    +-------------------+");
         screen_area_puts(ge->map, str);
-        sprintf(str, "  | 8D             %2d |",(int)id_act);
+        sprintf(str, "    | 8D             %2d |",(int)id_act);
       }
       screen_area_puts(ge->map, str);
-      sprintf(str, "  |                   |");
+      sprintf(str, "      |                   |");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  |                   |");
+      sprintf(str, "      |                   |");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s |",gdesc[0]);
+      sprintf(str, "      | %s |",gdesc[0]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s |",gdesc[1]);
+      sprintf(str, "      | %s |",gdesc[1]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s |",gdesc[2]);
+      sprintf(str, "      | %s |",gdesc[2]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  |                   |");
+      sprintf(str, "      |                   |");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  |                   |");
+      sprintf(str, "      |                   |");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | %s  %s  %s  %s|",obj[0], obj[1], obj[2], obj[3]);
+      sprintf(str, "      | %s  %s  %s  %s|",obj[0], obj[1], obj[2], obj[3]);
       screen_area_puts(ge->map, str);
-      sprintf(str, "  +-------------------+");
+      sprintf(str, "      +-------------------+");
       screen_area_puts(ge->map, str);
     }
     for (i=0;i<NUM_OBJ;i++){

@@ -9,7 +9,7 @@
  * @brief esta función se encarga de realizar
    un examen para asegurarse del funcionamiento del dado
  * @param los agumentos del main (argc y argv)
- * @return, 0,1, 2,3 o 4, dependiendo del error
+ * @return, 0,1,2,3 o 4, dependiendo del error
  */
 int main (int argc , char *argv[]){
   Dice *dice;

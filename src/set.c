@@ -8,7 +8,6 @@
 *@date 19/02/2018
 *@copyright GNU Public License
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,8 +17,7 @@
 /*Para no desaprovechar memoria...*/
 /*
 #define Set_Empty(x) (x==0)Macro para ver si el conjunto esta vacio
-#define Set_Full(x) (x > MAX_ID)Macro para ver si el conjunto esta lleno
-*/
+#define Set_Full(x) (x > MAX_ID)Macro para ver si el conjunto esta lleno*/
 
 
 

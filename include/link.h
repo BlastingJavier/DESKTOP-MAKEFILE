@@ -16,13 +16,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "types.h"
-
 /** @brief MAX_LINK*/
 #define MAX_LINK 250
 
 /**
  * @brief Estructura que lleva a cabo el manejo de enlaces entre espacios
 */
+
 typedef struct _Link Link;
 
 

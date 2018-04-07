@@ -1,5 +1,5 @@
 /**
-*@brief Manejo de jugadores (funcionalidad)
+*@brief Manejo de jugadores (funcionalidad) (interfaz)
 *
 *
 *@file player.h

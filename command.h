@@ -1,5 +1,5 @@
 /**
-*@brief Muestra la funcionalidad de la estructura de datos
+*@brief Muestra la funcionalidad de la estructura de datos (interfaz)
 *
 *@file command.h
 *@author FJNR & AMH & CMF & MLR
@@ -16,17 +16,17 @@
 */
 typedef enum enum_Command {
     NO_CMD = -1,
-    UNKNOWN, /*0*/
-    EXIT, /*1*/
-    SOUTH, /*2*/
-    NORTH, /*3*/
-    WEST,/*4*/
-    EAST,/*5*/
-    GET,/*6*/
-    DROP,/*7*/
-    DICE_ROLL,/*8*/
-    MOVEMENT,/*9*/
-    CHECK/*10*/
+    UNKNOWN, /*!<Num:0*/
+    EXIT, /*!<Num:1*/
+    SOUTH, /*!<Num:2*/
+    NORTH, /*!<Num:3*/
+    WEST,/*!<Num:4*/
+    EAST,/*!<Num:5*/
+    GET,/*!<Num:6*/
+    DROP,/*!<Num:7*/
+    DICE_ROLL,/*!<Num:8*/
+    MOVEMENT,/*!<Num:9*/
+    CHECK/*!<Num:10*/
 } T_Command;
 
 

@@ -1,5 +1,5 @@
 /**
- * @brief Define la pantalla
+ * @brief Define la pantalla (interfaz)
  *
  *
  * @file screen.h

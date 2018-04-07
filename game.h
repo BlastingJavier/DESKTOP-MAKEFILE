@@ -1,5 +1,5 @@
 /**
-*@brief Define la interfaz del juego
+*@brief Define la interfaz del juego (interfaz)
 *
 *
 *@file game.h
